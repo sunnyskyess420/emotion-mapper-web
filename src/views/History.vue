@@ -216,13 +216,13 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { useEntriesStore } from '../stores/entries'
 import Chart from 'chart.js/auto'
 
 const router = useRouter()
 const entriesStore = useEntriesStore()
-const entries = entriesStore.entries
-const isLoading = entriesStore.isLoading
+const { entries, isLoading } = storeToRefs(entriesStore)
 
 // Chart refs
 const intensityChart = ref(null)
