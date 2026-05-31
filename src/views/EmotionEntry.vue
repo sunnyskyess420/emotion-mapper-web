@@ -53,6 +53,22 @@
             placeholder="What caused this emotion?"
             class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
           >
+          <div v-if="savedTriggers.length > 0" class="flex flex-wrap gap-2 mt-2">
+            <span
+              v-for="trigger in savedTriggers"
+              :key="trigger.id"
+              @click="form.triggers = trigger.value"
+              class="bg-slate-600 hover:bg-slate-500 px-3 py-1 rounded text-sm cursor-pointer flex items-center gap-1"
+            >
+              {{ trigger.value }}
+              <button
+                @click.stop="deleteTriggerSuggestion(trigger.id)"
+                class="text-slate-400 hover:text-red-400 ml-1"
+              >
+                ×
+              </button>
+            </span>
+          </div>
         </div>
 
         <!-- Location -->
@@ -64,6 +80,22 @@
             placeholder="Where are you?"
             class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
           >
+          <div v-if="savedLocations.length > 0" class="flex flex-wrap gap-2 mt-2">
+            <span
+              v-for="location in savedLocations"
+              :key="location.id"
+              @click="form.location = location.value"
+              class="bg-slate-600 hover:bg-slate-500 px-3 py-1 rounded text-sm cursor-pointer flex items-center gap-1"
+            >
+              {{ location.value }}
+              <button
+                @click.stop="deleteLocationSuggestion(location.id)"
+                class="text-slate-400 hover:text-red-400 ml-1"
+              >
+                ×
+              </button>
+            </span>
+          </div>
         </div>
 
         <!-- Time of Day -->
@@ -216,11 +248,23 @@ import { useEntriesStore } from '../stores/entries'
 import EmotionWheel from '../components/EmotionWheel.vue'
 import PhysicalSensations from '../components/PhysicalSensations.vue'
 import CopingStrategies from '../components/CopingStrategies.vue'
+import {
+  getTriggerSuggestions,
+  getLocationSuggestions,
+  deleteTriggerSuggestion as deleteTrigger,
+  deleteLocationSuggestion as deleteLocation,
+  saveTriggerSuggestion,
+  saveLocationSuggestion
+} from '../db/database'
 
 const route = useRoute()
 const router = useRouter()
 const entriesStore = useEntriesStore()
 const { entries } = storeToRefs(entriesStore)
+
+// Saved suggestions
+const savedTriggers = ref([])
+const savedLocations = ref([])
 
 // Form data
 const form = ref({
@@ -253,8 +297,27 @@ function getEmotions(entry) {
   return []
 }
 
+// Load saved suggestions
+async function loadSavedSuggestions() {
+  savedTriggers.value = await getTriggerSuggestions()
+  savedLocations.value = await getLocationSuggestions()
+}
+
+// Delete suggestion functions
+async function deleteTriggerSuggestion(id) {
+  await deleteTrigger(id)
+  await loadSavedSuggestions()
+}
+
+async function deleteLocationSuggestion(id) {
+  await deleteLocation(id)
+  await loadSavedSuggestions()
+}
+
 // Load entry data if editing
-onMounted(() => {
+onMounted(async () => {
+  await loadSavedSuggestions()
+  
   if (isEditing.value) {
     const entryToEdit = entries.value?.find(e => e.id === parseInt(route.query.editId))
     if (entryToEdit) {
@@ -320,6 +383,17 @@ async function saveEntry() {
         sleepQuality: form.value.sleepQuality,
         energyLevel: form.value.energyLevel
       })
+      
+      // Save trigger and location suggestions
+      if (form.value.triggers) {
+        await saveTriggerSuggestion(form.value.triggers)
+      }
+      if (form.value.location) {
+        await saveLocationSuggestion(form.value.location)
+      }
+      
+      // Reload suggestions
+      await loadSavedSuggestions()
       
       // Clear form after saving
       form.value = {
