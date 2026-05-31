@@ -89,6 +89,40 @@ export const useEntriesStore = defineStore('entries', () => {
     }
   }
 
+  // Function to import entries from JSON backup
+  async function importEntries(importedEntries) {
+    try {
+      console.log('Importing entries:', importedEntries)
+      for (const entry of importedEntries) {
+        // Check if entry already exists by ID
+        const existing = await db.entries.get(entry.id)
+        if (!existing) {
+          await db.entries.add({
+            id: entry.id,
+            emotions: Array.isArray(entry.emotions) ? entry.emotions : [],
+            intensity: entry.intensity,
+            note: entry.note || '',
+            physicalSensations: Array.isArray(entry.physicalSensations) ? entry.physicalSensations : [],
+            triggers: entry.triggers || '',
+            location: entry.location || '',
+            timeOfDay: entry.timeOfDay || '',
+            copingStrategies: Array.isArray(entry.copingStrategies) ? entry.copingStrategies : [],
+            duration: entry.duration || '',
+            socialContext: entry.socialContext || '',
+            sleepQuality: entry.sleepQuality || '',
+            energyLevel: entry.energyLevel || '',
+            createdAt: entry.createdAt || new Date().toISOString()
+          })
+        }
+      }
+      await loadEntries() // Reload entries after import
+      console.log('Import completed')
+    } catch (error) {
+      console.error('Error importing entries:', error)
+      throw error
+    }
+  }
+
   // Load entries when store is created
   loadEntries()
 
@@ -98,6 +132,7 @@ export const useEntriesStore = defineStore('entries', () => {
     loadEntries,
     saveEntry,
     deleteEntry,
-    updateEntry
+    updateEntry,
+    importEntries
   }
 })
