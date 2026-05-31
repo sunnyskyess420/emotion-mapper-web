@@ -214,7 +214,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useEntriesStore } from '../stores/entries'
@@ -623,17 +623,21 @@ function initEmotionChart() {
 
 // Initialize charts on mount
 onMounted(() => {
-  if (entries.value && entries.value.length > 0) {
-    initIntensityChart()
-    initEmotionChart()
-  }
+  nextTick(() => {
+    if (entries.value && entries.value.length > 0) {
+      initIntensityChart()
+      initEmotionChart()
+    }
+  })
 })
 
 // Update charts when entries change
 watch(entries, () => {
-  if (entries.value && entries.value.length > 0) {
-    initIntensityChart()
-    initEmotionChart()
-  }
+  nextTick(() => {
+    if (entries.value && entries.value.length > 0) {
+      initIntensityChart()
+      initEmotionChart()
+    }
+  })
 }, { deep: true })
 </script>
