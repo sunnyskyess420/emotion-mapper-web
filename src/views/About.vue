@@ -15,7 +15,7 @@
         <ul class="list-disc list-inside text-slate-300 space-y-2 mb-4">
           <li><strong>Emotion Wheel Picker</strong> - Select from 50+ emotions organized by categories (Core, Positive, Negative, Calm, High Energy)</li>
           <li><strong>Physical Sensations Tracker</strong> - Categorized body signals including head & face, chest & heart, stomach & digestive, muscles & tension, breathing, skin & temperature, and energy & fatigue</li>
-          <li><strong>DBT Coping Strategies</strong> - Evidence-based skills including ACCEPTS, PLEASE, TIPP, IMPROVE, Pros & Cons, Radical Acceptance, Mindfulness, and Self-Soothe techniques</li>
+          <li><strong>DBT Coping Strategies</strong> - Evidence-based skills organized into four categories: Mindfulness (Wise Mind, "What" Skills, "How" Skills), Interpersonal Effectiveness (DEAR MAN, GIVE, FAST), Emotional Regulation (VITALS, ABC's, PLEASE, Check the facts, Act Opposite to Emotion), and Distress Tolerance (TIPP, STOP, ACCEPTS, IMPROVE, Thought Modification, Self-Soothe with the 5 Senses)</li>
           <li><strong>Rich Entry Details</strong> - Track intensity, triggers, location, time of day, duration, social context, sleep quality, and energy level</li>
           <li><strong>Visual Analytics</strong> - Interactive charts showing intensity trends over time and emotion distribution</li>
           <li><strong>Search & Filter</strong> - Find entries by emotion, note, sensations, triggers, or location</li>
