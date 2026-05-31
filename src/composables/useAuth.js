@@ -10,17 +10,45 @@ const isSigningIn = ref(false)
 export function useAuth() {
   const router = useRouter()
 
-  // Check localStorage for auth state on load
-  function loadAuthState() {
+  // Check Dexie Cloud session and localStorage for auth state on load
+  async function loadAuthState() {
     const savedMode = localStorage.getItem('authMode')
     const savedUser = localStorage.getItem('authUser')
     
-    if (savedMode) {
-      authMode.value = savedMode
-    }
-    
-    if (savedUser) {
-      user.value = JSON.parse(savedUser)
+    // If localStorage says signed-in, verify with Dexie Cloud
+    if (savedMode === 'signed-in') {
+      try {
+        const db = initDatabase('signed-in')
+        const currentUser = db.cloud.currentUser
+        
+        if (currentUser) {
+          // Dexie Cloud session is valid - restore from localStorage
+          authMode.value = 'signed-in'
+          if (savedUser) {
+            user.value = JSON.parse(savedUser)
+          } else {
+            // Fallback: set user from Dexie Cloud
+            user.value = {
+              email: currentUser.email || currentUser.userId,
+              id: currentUser.userId,
+              provider: 'google'
+            }
+            localStorage.setItem('authUser', JSON.stringify(user.value))
+          }
+        } else {
+          // Dexie Cloud session is invalid - fall back to guest
+          console.log('Dexie Cloud session invalid, falling back to guest mode')
+          setGuestMode()
+        }
+      } catch (error) {
+        console.error('Error checking Dexie Cloud session:', error)
+        // On error, fall back to guest mode
+        setGuestMode()
+      }
+    } else {
+      // Guest mode
+      authMode.value = 'guest'
+      user.value = null
     }
   }
 
@@ -73,6 +101,8 @@ export function useAuth() {
     } catch (error) {
       console.error('Sign in error:', error)
       window.showToast('Sign in failed: ' + error.message, 'error')
+      // On sign-in failure, fall back to guest mode
+      setGuestMode()
     } finally {
       isSigningIn.value = false
     }
@@ -109,7 +139,7 @@ export function useAuth() {
   const isSignedIn = computed(() => authMode.value === 'signed-in')
   const userEmail = computed(() => user.value?.email || null)
 
-  // Initialize on load
+  // Initialize on load (async)
   loadAuthState()
 
   return {
