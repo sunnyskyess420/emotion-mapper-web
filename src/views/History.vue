@@ -12,7 +12,7 @@
         <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-slate-800 rounded-lg p-6">
             <h3 class="text-lg font-semibold mb-2">Total Entries</h3>
-            <p class="text-3xl font-bold text-blue-400">{{ entries.length }}</p>
+            <p class="text-3xl font-bold text-blue-400">{{ entries ? entries.length : 0 }}</p>
           </div>
           <div class="bg-slate-800 rounded-lg p-6">
             <h3 class="text-lg font-semibold mb-2">Most Common Emotion</h3>
@@ -26,7 +26,7 @@
       </div>
 
       <!-- Charts Section -->
-      <div v-if="entries.length > 0" class="max-w-4xl mx-auto mb-8">
+      <div v-if="entries && entries.length > 0" class="max-w-4xl mx-auto mb-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-slate-800 rounded-lg p-6">
             <h3 class="text-lg font-semibold mb-4">Intensity Trend</h3>
@@ -49,7 +49,7 @@
           <div v-else>
             <div class="flex justify-between items-center mb-4">
               <h2 class="text-2xl font-semibold">All Entries</h2>
-              <div v-if="entries.length > 0" class="flex gap-2">
+              <div v-if="entries && entries.length > 0" class="flex gap-2">
                 <button 
                   @click="exportJSON"
                   class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors"
@@ -66,7 +66,7 @@
             </div>
 
           <!-- Filters -->
-          <div v-if="entries.length > 0" class="mb-4 p-4 bg-slate-700 rounded-lg">
+          <div v-if="entries && entries.length > 0" class="mb-4 p-4 bg-slate-700 rounded-lg">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label class="block text-sm font-medium mb-2">Search</label>
@@ -110,7 +110,7 @@
             </div>
           </div>
           
-          <div v-if="entries.length === 0" class="text-slate-400 text-center py-8">
+          <div v-if="!entries || entries.length === 0" class="text-slate-400 text-center py-8">
             No entries yet. Start tracking your emotions!
           </div>
           
