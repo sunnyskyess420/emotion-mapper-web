@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import EmotionEntry from '../views/EmotionEntry.vue'
 import History from '../views/History.vue'
+import AuthChoice from '../components/AuthChoice.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/history',
     name: 'History',
     component: History
+  },
+  {
+    path: '/auth',
+    name: 'Auth',
+    component: AuthChoice
   }
 ]
 
