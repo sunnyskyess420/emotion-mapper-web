@@ -15,7 +15,7 @@
         <ul class="list-disc list-inside text-slate-300 space-y-2 mb-4">
           <li><strong>Emotion Wheel Picker</strong> - Select from 50+ emotions organized by categories</li>
           <li><strong>Physical Sensations</strong> - Track body signals with categorized sensations (head, chest, muscles, breathing, etc.)</li>
-          <li><strong>DBT Coping Strategies</strong> - Log evidence-based coping skills (ACCEPTS, PLEASE, TIPP, IMPROVE, and more)</li>
+          <li><strong>DBT Coping Strategies</strong> - Log evidence-based coping skills organized into four categories: Mindfulness, Interpersonal Effectiveness, Emotional Regulation, and Distress Tolerance (including DEAR MAN, GIVE, FAST, TIPP, STOP, ACCEPTS, IMPROVE, and more)</li>
           <li><strong>Visual Analytics</strong> - Charts showing intensity trends and emotion distribution</li>
           <li><strong>Privacy First</strong> - All data stored locally in your browser</li>
         </ul>
