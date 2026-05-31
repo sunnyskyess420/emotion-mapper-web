@@ -51,6 +51,12 @@
               <h2 class="text-2xl font-semibold">All Entries</h2>
               <div v-if="entries && entries.length > 0" class="flex gap-2">
                 <button 
+                  @click="triggerFileInput"
+                  class="bg-purple-600 hover:bg-purple-700 text-white text-sm px-3 py-1 rounded transition-colors"
+                >
+                  Import JSON
+                </button>
+                <button 
                   @click="exportJSON"
                   class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors"
                 >
@@ -63,7 +69,22 @@
                   Export CSV
                 </button>
               </div>
+              <div v-else class="flex gap-2">
+                <button 
+                  @click="triggerFileInput"
+                  class="bg-purple-600 hover:bg-purple-700 text-white text-sm px-3 py-1 rounded transition-colors"
+                >
+                  Import JSON
+                </button>
+              </div>
             </div>
+            <input 
+              ref="fileInput"
+              type="file"
+              accept=".json"
+              @change="handleFileImport"
+              class="hidden"
+            >
 
           <!-- Filters -->
           <div v-if="entries && entries.length > 0" class="mb-4 p-4 bg-slate-700 rounded-lg">
@@ -236,6 +257,7 @@ let emotionChartInstance = null
 const searchQuery = ref('')
 const selectedEmotion = ref('')
 const selectedIntensity = ref('')
+const fileInput = ref(null)
 
 // Get emotions from entry (handles both old string format and new array format)
 function getEmotions(entry) {
@@ -499,6 +521,35 @@ function exportCSV() {
   } catch (error) {
     console.error('Error exporting CSV:', error)
     window.showToast('Error exporting CSV: ' + error.message, 'error')
+  }
+}
+
+// Trigger file input click
+function triggerFileInput() {
+  fileInput.value?.click()
+}
+
+// Handle file import
+async function handleFileImport(event) {
+  const file = event.target.files[0]
+  if (!file) return
+
+  try {
+    const text = await file.text()
+    const importedEntries = JSON.parse(text)
+    
+    if (!Array.isArray(importedEntries)) {
+      throw new Error('Invalid JSON format: expected an array of entries')
+    }
+
+    const count = await entriesStore.importEntries(importedEntries)
+    window.showToast(`Imported ${importedEntries.length} entries successfully!`)
+  } catch (error) {
+    console.error('Error importing JSON:', error)
+    window.showToast('Error importing JSON: ' + error.message, 'error')
+  } finally {
+    // Reset file input
+    event.target.value = ''
   }
 }
 
