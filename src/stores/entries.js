@@ -24,14 +24,14 @@ export const useEntriesStore = defineStore('entries', () => {
   async function saveEntry(entryData) {
     try {
       const newEntry = {
-        emotions: Array.isArray(entryData.emotions) ? [...entryData.emotions] : [],
+        emotions: Array.isArray(entryData.emotions) ? JSON.parse(JSON.stringify(entryData.emotions)) : [],
         intensity: entryData.intensity,
         note: entryData.note,
-        physicalSensations: Array.isArray(entryData.physicalSensations) ? [...entryData.physicalSensations] : [],
+        physicalSensations: Array.isArray(entryData.physicalSensations) ? JSON.parse(JSON.stringify(entryData.physicalSensations)) : [],
         triggers: entryData.triggers || '',
         location: entryData.location || '',
         timeOfDay: entryData.timeOfDay || '',
-        copingStrategies: Array.isArray(entryData.copingStrategies) ? [...entryData.copingStrategies] : [],
+        copingStrategies: Array.isArray(entryData.copingStrategies) ? JSON.parse(JSON.stringify(entryData.copingStrategies)) : [],
         duration: entryData.duration || '',
         socialContext: entryData.socialContext || '',
         sleepQuality: entryData.sleepQuality || '',
@@ -64,14 +64,14 @@ export const useEntriesStore = defineStore('entries', () => {
   async function updateEntry(id, entryData) {
     try {
       await db.entries.update(id, {
-        emotions: Array.isArray(entryData.emotions) ? [...entryData.emotions] : [],
+        emotions: Array.isArray(entryData.emotions) ? JSON.parse(JSON.stringify(entryData.emotions)) : [],
         intensity: entryData.intensity,
         note: entryData.note,
-        physicalSensations: Array.isArray(entryData.physicalSensations) ? [...entryData.physicalSensations] : [],
+        physicalSensations: Array.isArray(entryData.physicalSensations) ? JSON.parse(JSON.stringify(entryData.physicalSensations)) : [],
         triggers: entryData.triggers || '',
         location: entryData.location || '',
         timeOfDay: entryData.timeOfDay || '',
-        copingStrategies: Array.isArray(entryData.copingStrategies) ? [...entryData.copingStrategies] : [],
+        copingStrategies: Array.isArray(entryData.copingStrategies) ? JSON.parse(JSON.stringify(entryData.copingStrategies)) : [],
         duration: entryData.duration || '',
         socialContext: entryData.socialContext || '',
         sleepQuality: entryData.sleepQuality || '',
