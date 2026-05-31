@@ -387,43 +387,53 @@ function exportJSON() {
 
 // Export data as CSV
 function exportCSV() {
-  if (entries.value.length === 0) {
+  console.log('exportCSV called, entries.value:', entries.value)
+  
+  if (!entries.value || entries.value.length === 0) {
+    console.log('No entries to export')
     window.showToast('No entries to export', 'error')
     return
   }
 
-  const headers = ['ID', 'Emotions', 'Intensity', 'Note', 'Physical Sensations', 'Triggers', 'Location', 'Time of Day', 'Coping Strategies', 'Duration', 'Social Context', 'Sleep Quality', 'Energy Level', 'Created At']
-  const rows = entries.value.map(entry => [
-    entry.id,
-    getEmotions(entry).join('; '),
-    entry.intensity,
-    entry.note,
-    entry.physicalSensations || '',
-    entry.triggers || '',
-    entry.location || '',
-    entry.timeOfDay || '',
-    entry.copingStrategies || '',
-    entry.duration || '',
-    entry.socialContext || '',
-    entry.sleepQuality || '',
-    entry.energyLevel || '',
-    entry.createdAt
-  ])
+  try {
+    const headers = ['ID', 'Emotions', 'Intensity', 'Note', 'Physical Sensations', 'Triggers', 'Location', 'Time of Day', 'Coping Strategies', 'Duration', 'Social Context', 'Sleep Quality', 'Energy Level', 'Created At']
+    const rows = entries.value.map(entry => [
+      entry.id,
+      getEmotions(entry).join('; '),
+      entry.intensity,
+      entry.note,
+      entry.physicalSensations || '',
+      entry.triggers || '',
+      entry.location || '',
+      entry.timeOfDay || '',
+      entry.copingStrategies || '',
+      entry.duration || '',
+      entry.socialContext || '',
+      entry.sleepQuality || '',
+      entry.energyLevel || '',
+      entry.createdAt
+    ])
 
-  const csvContent = [
-    headers.join(','),
-    ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-  ].join('\n')
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    ].join('\n')
 
-  const blob = new Blob([csvContent], { type: 'text/csv' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `emotion-mapper-export-${new Date().toISOString().split('T')[0]}.csv`
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `emotion-mapper-export-${new Date().toISOString().split('T')[0]}.csv`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+    
+    console.log('CSV export completed')
+  } catch (error) {
+    console.error('Error exporting CSV:', error)
+    window.showToast('Error exporting CSV: ' + error.message, 'error')
+  }
 }
 
 // Initialize intensity trend chart
