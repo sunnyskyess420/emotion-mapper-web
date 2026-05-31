@@ -41,12 +41,7 @@
         <!-- Physical Sensations -->
         <div class="mb-4">
           <label class="block text-sm font-medium mb-2">Physical Sensations</label>
-          <input 
-            v-model="form.physicalSensations"
-            type="text"
-            placeholder="e.g., Tight chest, shaky hands, warm face"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-          >
+          <PhysicalSensations v-model="form.physicalSensations" />
         </div>
 
         <!-- Triggers -->
@@ -89,12 +84,7 @@
         <!-- Coping Strategies -->
         <div class="mb-4">
           <label class="block text-sm font-medium mb-2">Coping Strategies Used</label>
-          <textarea 
-            v-model="form.copingStrategies"
-            placeholder="What did you do to manage this emotion?"
-            rows="2"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white resize-none"
-          ></textarea>
+          <CopingStrategies v-model="form.copingStrategies" />
         </div>
 
         <!-- Duration -->
@@ -215,6 +205,8 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useEntriesStore } from '../stores/entries'
 import EmotionWheel from '../components/EmotionWheel.vue'
+import PhysicalSensations from '../components/PhysicalSensations.vue'
+import CopingStrategies from '../components/CopingStrategies.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -225,11 +217,11 @@ const form = ref({
   emotions: [],
   intensity: 5,
   note: '',
-  physicalSensations: '',
+  physicalSensations: [],
   triggers: '',
   location: '',
   timeOfDay: '',
-  copingStrategies: '',
+  copingStrategies: [],
   duration: '',
   socialContext: '',
   sleepQuality: '',
@@ -251,11 +243,11 @@ onMounted(() => {
         emotions: Array.isArray(entryToEdit.emotions) ? entryToEdit.emotions : (entryToEdit.emotion ? [entryToEdit.emotion] : []),
         intensity: entryToEdit.intensity,
         note: entryToEdit.note,
-        physicalSensations: entryToEdit.physicalSensations || '',
+        physicalSensations: Array.isArray(entryToEdit.physicalSensations) ? entryToEdit.physicalSensations : (entryToEdit.physicalSensations ? [entryToEdit.physicalSensations] : []),
         triggers: entryToEdit.triggers || '',
         location: entryToEdit.location || '',
         timeOfDay: entryToEdit.timeOfDay || '',
-        copingStrategies: entryToEdit.copingStrategies || '',
+        copingStrategies: Array.isArray(entryToEdit.copingStrategies) ? entryToEdit.copingStrategies : (entryToEdit.copingStrategies ? [entryToEdit.copingStrategies] : []),
         duration: entryToEdit.duration || '',
         socialContext: entryToEdit.socialContext || '',
         sleepQuality: entryToEdit.sleepQuality || '',
@@ -313,11 +305,11 @@ async function saveEntry() {
         emotions: [],
         intensity: 5,
         note: '',
-        physicalSensations: '',
+        physicalSensations: [],
         triggers: '',
         location: '',
         timeOfDay: '',
-        copingStrategies: '',
+        copingStrategies: [],
         duration: '',
         socialContext: '',
         sleepQuality: '',
