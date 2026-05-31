@@ -1,36 +1,62 @@
 import Dexie from 'dexie'
+import dexieCloud from 'dexie-cloud-addon'
 
-// Create Dexie database
-const db = new Dexie('emotionMapperDB')
+let db = null
 
-// Define database schema with upgrade handler
-db.version(1).stores({
-  entries: '++id, emotion, intensity, note, createdAt'
-})
+// Initialize database based on auth mode
+export function initDatabase(authMode = 'guest') {
+  // Close existing database if open
+  if (db) {
+    db.close()
+  }
 
-db.version(2).stores({
-  entries: '++id, emotion, intensity, note, createdAt, physicalSensations, triggers, location, timeOfDay, copingStrategies, duration, socialContext, sleepQuality, energyLevel'
-})
+  // Use different database names for guest vs signed-in to prevent data mixing
+  const dbName = authMode === 'signed-in' ? 'emotionMapperDB' : 'emotionMapperDB_guest'
+  db = new Dexie(dbName)
 
-db.version(3).stores({
-  entries: '++id, emotions, intensity, note, createdAt, physicalSensations, triggers, location, timeOfDay, copingStrategies, duration, socialContext, sleepQuality, energyLevel'
-})
+  // Add Dexie Cloud addon only for signed-in mode
+  if (authMode === 'signed-in') {
+    db.use(dexieCloud, {
+      databaseUrl: import.meta.env.VITE_DEXIE_CLOUD_URL || 'https://your-app.dexie.cloud',
+      requireAuth: true
+    })
+  }
 
-db.version(4).stores({
-  entries: '++id, emotion, intensity, note, createdAt, physicalSensations, triggers, location, timeOfDay, copingStrategies, duration, socialContext, sleepQuality, energyLevel'
-})
+  // Define database schema with upgrade handler
+  db.version(1).stores({
+    entries: '++id, emotion, intensity, note, createdAt'
+  })
 
-// Note: emotions, physicalSensations, and copingStrategies are not indexed because IndexedDB cannot index arrays
-db.version(5).stores({
-  entries: '++id, emotion, intensity, note, createdAt, triggers, location, timeOfDay, duration, socialContext, sleepQuality, energyLevel'
-})
+  db.version(2).stores({
+    entries: '++id, emotion, intensity, note, createdAt, physicalSensations, triggers, location, timeOfDay, copingStrategies, duration, socialContext, sleepQuality, energyLevel'
+  })
 
-// Add stores for saved triggers and locations
-db.version(6).stores({
-  entries: '++id, emotion, intensity, note, createdAt, triggers, location, timeOfDay, duration, socialContext, sleepQuality, energyLevel',
-  savedTriggers: '++id, value, createdAt',
-  savedLocations: '++id, value, createdAt'
-})
+  db.version(3).stores({
+    entries: '++id, emotions, intensity, note, createdAt, physicalSensations, triggers, location, timeOfDay, copingStrategies, duration, socialContext, sleepQuality, energyLevel'
+  })
+
+  db.version(4).stores({
+    entries: '++id, emotion, intensity, note, createdAt, physicalSensations, triggers, location, timeOfDay, copingStrategies, duration, socialContext, sleepQuality, energyLevel'
+  })
+
+  // Note: emotions, physicalSensations, and copingStrategies are not indexed because IndexedDB cannot index arrays
+  db.version(5).stores({
+    entries: '++id, emotion, intensity, note, createdAt, triggers, location, timeOfDay, duration, socialContext, sleepQuality, energyLevel'
+  })
+
+  // Add stores for saved triggers and locations
+  db.version(6).stores({
+    entries: '++id, emotion, intensity, note, createdAt, triggers, location, timeOfDay, duration, socialContext, sleepQuality, energyLevel',
+    savedTriggers: '++id, value, createdAt',
+    savedLocations: '++id, value, createdAt'
+  })
+
+  return db
+}
+
+// Initialize database on first load
+const authMode = localStorage.getItem('authMode') || 'guest'
+db = initDatabase(authMode)
 
 // Helper functions for saved suggestions
 export function normalizeReusableValue(value) {
