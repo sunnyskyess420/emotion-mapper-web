@@ -1,4 +1,5 @@
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { initDatabase } from '../db/database'
 
 const authMode = ref('guest') // 'guest' | 'signed-in'
@@ -7,6 +8,8 @@ const hasGuestData = ref(false)
 const isSigningIn = ref(false)
 
 export function useAuth() {
+  const router = useRouter()
+
   // Check localStorage for auth state on load
   function loadAuthState() {
     const savedMode = localStorage.getItem('authMode')
@@ -48,20 +51,27 @@ export function useAuth() {
     isSigningIn.value = true
     
     try {
-      // This will be implemented with Dexie Cloud OAuth
-      // For now, show a placeholder message
-      window.showToast('Google sign-in will be implemented with Dexie Cloud OAuth', 'info')
+      // Initialize database for signed-in mode
+      const db = initDatabase('signed-in')
       
-      // TODO: Implement actual Dexie Cloud OAuth
-      // const db = await initDatabase('signed-in')
-      // await db.cloudLogin()
+      // Sign in with Dexie Cloud Google OAuth
+      await db.cloud.login({ provider: 'google' })
       
-      // setSignedInMode({
-      //   email: 'user@example.com',
-      //   id: 'user-id',
-      //   provider: 'google'
-      // })
+      // Get current user info from Dexie Cloud
+      const currentUser = db.cloud.currentUser
+      
+      if (currentUser) {
+        setSignedInMode({
+          email: currentUser.email || currentUser.userId,
+          id: currentUser.userId,
+          provider: 'google'
+        })
+        
+        window.showToast('Signed in successfully!')
+        router.push('/')
+      }
     } catch (error) {
+      console.error('Sign in error:', error)
       window.showToast('Sign in failed: ' + error.message, 'error')
     } finally {
       isSigningIn.value = false
@@ -69,14 +79,23 @@ export function useAuth() {
   }
 
   // Sign out
-  function signOut() {
-    authMode.value = 'guest'
-    user.value = null
-    localStorage.setItem('authMode', 'guest')
-    localStorage.removeItem('authUser')
-    
-    // Reinitialize database for guest mode
-    initDatabase('guest')
+  async function signOut() {
+    try {
+      // Sign out from Dexie Cloud if signed in
+      if (authMode.value === 'signed-in') {
+        const db = initDatabase('signed-in')
+        await db.cloud.logout()
+      }
+      
+      // Set guest mode
+      setGuestMode()
+      
+      window.showToast('Signed out successfully')
+      router.push('/')
+    } catch (error) {
+      console.error('Sign out error:', error)
+      window.showToast('Sign out failed: ' + error.message, 'error')
+    }
   }
 
   // Check if user has guest data
