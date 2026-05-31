@@ -327,12 +327,15 @@ const uniqueEmotions = computed(() => {
 // Filter entries based on search and filters
 const filteredEntries = computed(() => {
   try {
+    console.log('filteredEntries called, entries.value:', entries.value)
     if (!entries.value || !Array.isArray(entries.value)) return []
     
     return entries.value.filter(entry => {
       const emotions = getEmotions(entry)
       const sensations = getPhysicalSensations(entry)
       const strategies = getCopingStrategies(entry)
+      
+      console.log('Filtering entry:', entry.id, 'emotions:', emotions)
       
       // Search filter
       if (searchQuery.value) {
@@ -359,6 +362,7 @@ const filteredEntries = computed(() => {
         return false
       }
 
+      console.log('Entry passed filters:', entry.id)
       return true
     })
   } catch (error) {
