@@ -24,7 +24,7 @@ export const useEntriesStore = defineStore('entries', () => {
   async function saveEntry(entryData) {
     try {
       const newEntry = {
-        emotion: entryData.emotion,
+        emotions: entryData.emotions || [],
         intensity: entryData.intensity,
         note: entryData.note,
         physicalSensations: entryData.physicalSensations || '',
@@ -62,7 +62,7 @@ export const useEntriesStore = defineStore('entries', () => {
   async function updateEntry(id, entryData) {
     try {
       await db.entries.update(id, {
-        emotion: entryData.emotion,
+        emotions: entryData.emotions || [],
         intensity: entryData.intensity,
         note: entryData.note,
         physicalSensations: entryData.physicalSensations || '',
