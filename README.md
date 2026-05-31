@@ -15,15 +15,11 @@ A modern, privacy-focused emotion tracking web application. Track your emotional
   - Breathing (shortness of breath, shallow breathing, rapid breathing, paused breathing)
   - Skin & Temperature (sweating, hot flashes, cold chills, skin sensitivity)
   - Energy & Fatigue (shaking, trembling, weakness, fatigue, restlessness)
-- **DBT Coping Strategies** - Evidence-based skills including:
-  - ACCEPTS (Activities, Contributing, Comparisons, Emotions, Push away, Thoughts, Sensations)
-  - PLEASE (Treat Physical Illness, Eating, Avoid mood-altering drugs, Sleep, Exercise)
-  - TIPP (Temperature, Intense exercise, Paced breathing, Paused muscle relaxation)
-  - IMPROVE (Imagery, Meaning, Prayer, Relaxation, One thing in the moment, Vacation, Encouragement)
-  - Pros & Cons analysis
-  - Radical Acceptance
-  - Mindfulness skills
-  - Self-Soothe techniques
+- **DBT Coping Strategies** - Evidence-based skills organized into four categories:
+  - **Mindfulness** - Wise Mind, "What" Skills (Observe, Describe, Participate), "How" Skills (One-mindfully, Non-judgmentally, Effectively)
+  - **Interpersonal Effectiveness** - DEAR MAN (Describe, Express, Assert, Reinforce, Mindful, Appear confident, Negotiate), GIVE (Gentle, Interested, Validate, Easy manner), FAST (Fair, Apologies only if necessary, Stick to values, Truthful)
+  - **Emotional Regulation** - VITALS to success (Validate yourself, Imagine success, Take small steps, Applaud yourself, Lighten the load, Sweeten the pot), The ABC's of DBT (Accumulate positive experiences, Build mastery, Cope for emotional events), PLEASE (Treat physical illness, Eating balanced, Avoid alternative drugs, Sleep balanced, Exercise consistently), Check the facts, Act Opposite to Emotion, Experience emotions as waves, Thoughts/feelings/emotions are not facts
+  - **Distress Tolerance** - TIPP (Tip the temperature, Intense exercise, Paced breathing, Progressive muscle relaxation), STOP (Stop, Take a step back, Observe, Proceed mindfully), ACCEPTS (Activities, Contributions, Comparison, Emotion opposites, Pushing away, Thoughts, Sensations), IMPROVE (Imagery, Meaning, Prayer, Relaxation, One thing at a time, Vacation, Encouragement), Thought Modification (Radical acceptance, Turn the mind to acceptance, Pain + non-acceptance = suffering), Self-Soothe with the 5 Senses (Vision, Touch, Hearing, Smell, Taste), Pros/Cons, Half smile/willing hands, Observe the breath
 - **Emotion Entry Form** - Log emotions with 12 detailed fields including intensity, triggers, location, time of day, coping strategies, and more
 - **History & Analytics** - View all your entries with powerful search and filtering capabilities
 - **Visual Analytics** - Interactive charts showing intensity trends over time and emotion distribution
@@ -59,7 +55,7 @@ A modern, privacy-focused emotion tracking web application. Track your emotional
      - **Triggers** (e.g., "work deadline", "family gathering")
      - **Location** (e.g., "home", "office", "coffee shop")
      - **Time of day** (e.g., "morning", "afternoon", "evening")
-     - **Coping Strategies** - Click to select DBT skills (ACCEPTS, PLEASE, TIPP, IMPROVE, and more)
+     - **Coping Strategies** - Click to select DBT skills organized into four categories: Mindfulness (Wise Mind, "What" Skills, "How" Skills), Interpersonal Effectiveness (DEAR MAN, GIVE, FAST), Emotional Regulation (VITALS, ABC's, PLEASE, Check the facts, Act Opposite to Emotion), and Distress Tolerance (TIPP, STOP, ACCEPTS, IMPROVE, Thought Modification, Self-Soothe with the 5 Senses)
      - **Duration** of the emotion
      - **Social context** (e.g., "alone", "with friends")
      - **Sleep quality**
