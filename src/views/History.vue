@@ -364,9 +364,14 @@ const filteredEntries = computed(() => {
       }
 
       // Intensity filter
-      if (selectedIntensity.value && entry.intensity !== parseInt(selectedIntensity.value)) {
-        console.log('Entry filtered out by intensity:', entry.id, 'selected:', selectedIntensity.value)
-        return false
+      if (selectedIntensity.value) {
+        const entryIntensity = parseInt(entry.intensity || 0)
+        const selectedIntensityVal = parseInt(selectedIntensity.value)
+        console.log('Intensity filter check:', entry.id, 'entryIntensity:', entryIntensity, 'selected:', selectedIntensityVal, 'match:', entryIntensity === selectedIntensityVal)
+        if (entryIntensity !== selectedIntensityVal) {
+          console.log('Entry filtered out by intensity:', entry.id, 'selected:', selectedIntensity.value)
+          return false
+        }
       }
 
       console.log('Entry passed filters:', entry.id)
