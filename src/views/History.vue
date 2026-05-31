@@ -219,20 +219,41 @@ const searchQuery = ref('')
 const selectedEmotion = ref('')
 const selectedIntensity = ref('')
 
+// Get emotions from entry (handles both old string format and new array format)
+function getEmotions(entry) {
+  if (Array.isArray(entry.emotions)) {
+    return entry.emotions
+  }
+  // Backward compatibility: if old entry has emotion string, convert to array
+  if (entry.emotion) {
+    return [entry.emotion]
+  }
+  return []
+}
+
 // Calculate most common emotion
 const mostCommonEmotion = computed(() => {
-  if (!entries.value || entries.value.length === 0) return 'N/A'
+  if (isLoading.value) return 'Loading...'
+  if (!entries.value || !Array.isArray(entries.value) || entries.value.length === 0) return 'N/A'
   
-  const emotionCounts = {}
-  entries.value.forEach(entry => {
-    getEmotions(entry).forEach(emotion => {
-      emotionCounts[emotion] = (emotionCounts[emotion] || 0) + 1
+  try {
+    const emotionCounts = {}
+    entries.value.forEach(entry => {
+      const emotions = getEmotions(entry)
+      if (Array.isArray(emotions)) {
+        emotions.forEach(emotion => {
+          emotionCounts[emotion] = (emotionCounts[emotion] || 0) + 1
+        })
+      }
     })
-  })
-  
-  const emotionEntries = Object.entries(emotionCounts)
-  if (emotionEntries.length === 0) return 'N/A'
-  return emotionEntries.sort((a, b) => b[1] - a[1])[0][0]
+    
+    const emotionEntries = Object.entries(emotionCounts)
+    if (emotionEntries.length === 0) return 'N/A'
+    return emotionEntries.sort((a, b) => b[1] - a[1])[0][0]
+  } catch (error) {
+    console.error('Error in mostCommonEmotion:', error)
+    return 'N/A'
+  }
 })
 
 // Calculate average intensity
@@ -245,45 +266,58 @@ const averageIntensity = computed(() => {
 
 // Get unique emotions for filter dropdown
 const uniqueEmotions = computed(() => {
-  if (!entries.value) return []
-  const emotions = new Set()
-  entries.value.forEach(entry => {
-    getEmotions(entry).forEach(e => emotions.add(e))
-  })
-  return Array.from(emotions).sort()
+  try {
+    if (!entries.value || !Array.isArray(entries.value)) return []
+    const emotionSet = new Set()
+    entries.value.forEach(entry => {
+      const emotions = getEmotions(entry)
+      if (Array.isArray(emotions)) {
+        emotions.forEach(e => emotionSet.add(e))
+      }
+    })
+    return Array.from(emotionSet).sort()
+  } catch (error) {
+    console.error('Error in uniqueEmotions:', error)
+    return []
+  }
 })
 
 // Filter entries based on search and filters
 const filteredEntries = computed(() => {
-  if (!entries.value) return []
-  
-  return entries.value.filter(entry => {
-    const emotions = getEmotions(entry)
+  try {
+    if (!entries.value || !Array.isArray(entries.value)) return []
     
-    // Search filter
-    if (searchQuery.value) {
-      const query = searchQuery.value.toLowerCase()
-      const matchesSearch = 
-        emotions.some(e => e.toLowerCase().includes(query)) ||
-        entry.note.toLowerCase().includes(query) ||
-        (entry.physicalSensations && entry.physicalSensations.toLowerCase().includes(query)) ||
-        (entry.triggers && entry.triggers.toLowerCase().includes(query)) ||
-        (entry.location && entry.location.toLowerCase().includes(query))
-      if (!matchesSearch) return false
-    }
+    return entries.value.filter(entry => {
+      const emotions = getEmotions(entry)
+      
+      // Search filter
+      if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase()
+        const matchesSearch = 
+          (Array.isArray(emotions) && emotions.some(e => e.toLowerCase().includes(query))) ||
+          entry.note.toLowerCase().includes(query) ||
+          (entry.physicalSensations && entry.physicalSensations.toLowerCase().includes(query)) ||
+          (entry.triggers && entry.triggers.toLowerCase().includes(query)) ||
+          (entry.location && entry.location.toLowerCase().includes(query))
+        if (!matchesSearch) return false
+      }
 
-    // Emotion filter
-    if (selectedEmotion.value && !emotions.includes(selectedEmotion.value)) {
-      return false
-    }
+      // Emotion filter
+      if (selectedEmotion.value && !Array.isArray(emotions) || !emotions.includes(selectedEmotion.value)) {
+        return false
+      }
 
-    // Intensity filter
-    if (selectedIntensity.value && entry.intensity !== parseInt(selectedIntensity.value)) {
-      return false
-    }
+      // Intensity filter
+      if (selectedIntensity.value && entry.intensity !== parseInt(selectedIntensity.value)) {
+        return false
+      }
 
-    return true
-  })
+      return true
+    })
+  } catch (error) {
+    console.error('Error in filteredEntries:', error)
+    return []
+  }
 })
 
 // Check if any filters are active
@@ -315,18 +349,6 @@ function hasAdditionalDetails(entry) {
          entry.socialContext || 
          entry.sleepQuality || 
          entry.energyLevel
-}
-
-// Get emotions from entry (handles both old string format and new array format)
-function getEmotions(entry) {
-  if (Array.isArray(entry.emotions)) {
-    return entry.emotions
-  }
-  // Backward compatibility: if old entry has emotion string, convert to array
-  if (entry.emotion) {
-    return [entry.emotion]
-  }
-  return []
 }
 
 // Delete an entry
