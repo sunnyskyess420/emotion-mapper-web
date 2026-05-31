@@ -253,12 +253,6 @@ function getEmotions(entry) {
   return []
 }
 
-// Format date for display
-function formatDate(dateString) {
-  const date = new Date(dateString)
-  return date.toLocaleString()
-}
-
 // Load entry data if editing
 onMounted(() => {
   if (isEditing.value) {
