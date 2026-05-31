@@ -348,8 +348,10 @@ const filteredEntries = computed(() => {
       }
 
       // Emotion filter
-      if (selectedEmotion.value && !Array.isArray(emotions) || !emotions.includes(selectedEmotion.value)) {
-        return false
+      if (selectedEmotion.value) {
+        if (!Array.isArray(emotions) || !emotions.includes(selectedEmotion.value)) {
+          return false
+        }
       }
 
       // Intensity filter
