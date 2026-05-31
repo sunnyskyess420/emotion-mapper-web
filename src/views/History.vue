@@ -191,12 +191,12 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useEntriesStore } from '../stores/entries'
-import { storeToRefs } from 'pinia'
 import Chart from 'chart.js/auto'
 
 const router = useRouter()
 const entriesStore = useEntriesStore()
-const { entries, isLoading } = storeToRefs(entriesStore)
+const entries = entriesStore.entries
+const isLoading = entriesStore.isLoading
 
 // Chart refs
 const intensityChart = ref(null)
@@ -213,10 +213,10 @@ const selectedIntensity = ref('')
 
 // Calculate most common emotion
 const mostCommonEmotion = computed(() => {
-  if (entries.length === 0) return 'N/A'
+  if (!entries.value || entries.value.length === 0) return 'N/A'
   
   const emotionCounts = {}
-  entries.forEach(entry => {
+  entries.value.forEach(entry => {
     emotionCounts[entry.emotion] = (emotionCounts[entry.emotion] || 0) + 1
   })
   
@@ -225,20 +225,23 @@ const mostCommonEmotion = computed(() => {
 
 // Calculate average intensity
 const averageIntensity = computed(() => {
-  if (entries.length === 0) return 0
+  if (!entries.value || entries.value.length === 0) return 0
   
-  const total = entries.reduce((sum, entry) => sum + entry.intensity, 0)
-  return (total / entries.length).toFixed(1)
+  const total = entries.value.reduce((sum, entry) => sum + entry.intensity, 0)
+  return (total / entries.value.length).toFixed(1)
 })
 
 // Get unique emotions for filter dropdown
 const uniqueEmotions = computed(() => {
+  if (!entries.value) return []
   const emotions = new Set(entries.value.map(entry => entry.emotion))
   return Array.from(emotions).sort()
 })
 
 // Filter entries based on search and filters
 const filteredEntries = computed(() => {
+  if (!entries.value) return []
+  
   return entries.value.filter(entry => {
     // Search filter
     if (searchQuery.value) {

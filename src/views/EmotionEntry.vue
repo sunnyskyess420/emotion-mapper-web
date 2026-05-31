@@ -219,12 +219,29 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useEntriesStore } from '../stores/entries'
-import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const router = useRouter()
 const entriesStore = useEntriesStore()
-const { entries } = storeToRefs(entriesStore)
+
+// Form data
+const form = ref({
+  emotion: '',
+  intensity: 5,
+  note: '',
+  physicalSensations: '',
+  triggers: '',
+  location: '',
+  timeOfDay: '',
+  copingStrategies: '',
+  duration: '',
+  socialContext: '',
+  sleepQuality: '',
+  energyLevel: ''
+})
+
+// Get entries from store
+const entries = entriesStore.entries
 
 // Check if we're in edit mode
 const isEditing = computed(() => !!route.query.editId)
@@ -232,7 +249,7 @@ const isEditing = computed(() => !!route.query.editId)
 // Load entry data if editing
 onMounted(() => {
   if (isEditing.value) {
-    const entryToEdit = entries.value.find(e => e.id === parseInt(route.query.editId))
+    const entryToEdit = entries.value?.find(e => e.id === parseInt(route.query.editId))
     if (entryToEdit) {
       form.value = {
         emotion: entryToEdit.emotion,
