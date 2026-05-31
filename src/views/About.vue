@@ -10,14 +10,27 @@
         <p class="text-slate-300 mb-4">
           Your data never leaves your device - no cloud storage, no accounts, no tracking.
         </p>
-        <h3 class="text-xl font-semibold mb-2 mt-6">Features</h3>
-        <ul class="list-disc list-inside text-slate-300 space-y-2">
-          <li>Track emotional entries with 12 detailed fields including physical sensations, triggers, location, time of day, coping strategies, duration, social context, sleep quality, and energy level</li>
-          <li>View history and analytics with statistics</li>
-          <li>Edit and delete past entries</li>
-          <li>Export data for backup or therapist sharing</li>
-          <li>100% offline - works without internet</li>
+        
+        <h3 class="text-xl font-semibold mb-3 mt-6">Features</h3>
+        <ul class="list-disc list-inside text-slate-300 space-y-2 mb-4">
+          <li><strong>Emotion Wheel Picker</strong> - Select from 50+ emotions organized by categories (Core, Positive, Negative, Calm, High Energy)</li>
+          <li><strong>Physical Sensations Tracker</strong> - Categorized body signals including head & face, chest & heart, stomach & digestive, muscles & tension, breathing, skin & temperature, and energy & fatigue</li>
+          <li><strong>DBT Coping Strategies</strong> - Evidence-based skills including ACCEPTS, PLEASE, TIPP, IMPROVE, Pros & Cons, Radical Acceptance, Mindfulness, and Self-Soothe techniques</li>
+          <li><strong>Rich Entry Details</strong> - Track intensity, triggers, location, time of day, duration, social context, sleep quality, and energy level</li>
+          <li><strong>Visual Analytics</strong> - Interactive charts showing intensity trends over time and emotion distribution</li>
+          <li><strong>Search & Filter</strong> - Find entries by emotion, note, sensations, triggers, or location</li>
+          <li><strong>Edit & Delete</strong> - Full control over your entries</li>
+          <li><strong>Data Export</strong> - Export as JSON or CSV for backup or therapist sharing</li>
+          <li><strong>100% Offline</strong> - Works without internet connection</li>
         </ul>
+        
+        <h3 class="text-xl font-semibold mb-3 mt-6">Data Privacy</h3>
+        <p class="text-slate-300 mb-4">
+          All data is stored locally in your browser's IndexedDB. Your entries are never transmitted to any server. Clear your browser data to remove all entries.
+        </p>
+        <p class="text-slate-300">
+          Export your data regularly to backup your entries.
+        </p>
       </div>
     </div>
   </div>
