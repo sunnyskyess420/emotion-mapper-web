@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-slate-900 text-white">
-    <nav class="bg-slate-800 border-b border-slate-700">
+    <nav class="bg-slate-800 border-b border-slate-700 fixed top-0 left-0 right-0 z-50">
       <div class="container mx-auto px-4">
         <div class="flex items-center gap-8 h-16">
           <router-link to="/" class="hover:text-blue-400 font-semibold transition-colors duration-200">
@@ -21,7 +21,7 @@
 
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
-        <component :is="Component" />
+        <component :is="Component" class="pt-16" />
       </transition>
     </router-view>
     
