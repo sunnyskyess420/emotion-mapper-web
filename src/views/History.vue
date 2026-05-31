@@ -328,14 +328,16 @@ const uniqueEmotions = computed(() => {
 const filteredEntries = computed(() => {
   try {
     console.log('filteredEntries called, entries.value:', entries.value)
-    if (!entries.value || !Array.isArray(entries.value)) return []
+    console.log('entries.value length:', entries.value?.length)
+    if (!entries.value || !Array.isArray(entries.value) || entries.value.length === 0) return []
     
-    return entries.value.filter(entry => {
+    console.log('Processing', entries.value.length, 'entries')
+    const filtered = entries.value.filter(entry => {
       const emotions = getEmotions(entry)
       const sensations = getPhysicalSensations(entry)
       const strategies = getCopingStrategies(entry)
       
-      console.log('Filtering entry:', entry.id, 'emotions:', emotions)
+      console.log('Filtering entry:', entry.id, 'emotions:', emotions, 'intensity:', entry.intensity)
       
       // Search filter
       if (searchQuery.value) {
@@ -347,24 +349,32 @@ const filteredEntries = computed(() => {
           (Array.isArray(strategies) && strategies.some(s => s.toLowerCase().includes(query))) ||
           (entry.triggers && entry.triggers.toLowerCase().includes(query)) ||
           (entry.location && entry.location.toLowerCase().includes(query))
-        if (!matchesSearch) return false
+        if (!matchesSearch) {
+          console.log('Entry filtered out by search:', entry.id)
+          return false
+        }
       }
 
       // Emotion filter
       if (selectedEmotion.value) {
         if (!Array.isArray(emotions) || !emotions.includes(selectedEmotion.value)) {
+          console.log('Entry filtered out by emotion:', entry.id, 'selected:', selectedEmotion.value)
           return false
         }
       }
 
       // Intensity filter
       if (selectedIntensity.value && entry.intensity !== parseInt(selectedIntensity.value)) {
+        console.log('Entry filtered out by intensity:', entry.id, 'selected:', selectedIntensity.value)
         return false
       }
 
       console.log('Entry passed filters:', entry.id)
       return true
     })
+    
+    console.log('Filtered entries count:', filtered.length)
+    return filtered
   } catch (error) {
     console.error('Error in filteredEntries:', error)
     return []
