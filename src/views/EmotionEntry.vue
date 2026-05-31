@@ -254,7 +254,8 @@ import {
   deleteTriggerSuggestion as deleteTrigger,
   deleteLocationSuggestion as deleteLocation,
   saveTriggerSuggestion,
-  saveLocationSuggestion
+  saveLocationSuggestion,
+  initDatabase
 } from '../db/database'
 
 const route = useRoute()
@@ -299,6 +300,7 @@ function getEmotions(entry) {
 
 // Load saved suggestions
 async function loadSavedSuggestions() {
+  const db = initDatabase(localStorage.getItem('authMode') || 'guest')
   savedTriggers.value = await getTriggerSuggestions()
   savedLocations.value = await getLocationSuggestions()
 }
