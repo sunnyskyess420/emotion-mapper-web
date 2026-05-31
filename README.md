@@ -6,6 +6,7 @@ A modern, privacy-focused emotion tracking web application. Track your emotional
 
 ## ✨ Features
 
+- **Emotion Wheel Picker** - Interactive popup with 50+ emotions organized by categories (Core, Positive, Negative, Calm, High Energy). Select multiple emotions at once for comprehensive tracking
 - **Emotion Entry Form** - Log emotions with 12 detailed fields including intensity, physical sensations, triggers, location, time of day, coping strategies, and more
 - **History & Analytics** - View all your entries with powerful search and filtering capabilities
 - **Visual Analytics** - Interactive charts showing intensity trends over time and emotion distribution
@@ -26,7 +27,14 @@ A modern, privacy-focused emotion tracking web application. Track your emotional
 
 2. **Add Your First Entry**
    - Click "Emotion Entry" in the navigation
-   - Enter the emotion name (e.g., "Happy", "Anxious", "Calm")
+   - Click the "Emotions" field to open the Emotion Wheel Picker
+   - Select one or more emotions from the organized categories:
+     - Core Emotions (Joy, Sadness, Fear, Anger, Disgust, Surprise)
+     - Positive (Happy, Excited, Grateful, Hopeful, and more)
+     - Negative (Anxious, Depressed, Frustrated, Angry, and more)
+     - Calm/Neutral (Calm, Peaceful, Relaxed, Serene, and more)
+     - High Energy (Excited, Energetic, Enthusiastic, and more)
+   - Click "Confirm" to save your emotion selection
    - Set the intensity level (1-10)
    - Add a short note about how you're feeling
    - Optionally fill in additional details:
