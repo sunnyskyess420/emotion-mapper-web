@@ -184,7 +184,15 @@
             class="bg-slate-700 rounded-lg p-4"
           >
             <div class="flex justify-between items-start mb-2">
-              <h3 class="font-semibold text-lg">{{ entry.emotion }}</h3>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="emotion in getEmotions(entry)"
+                  :key="emotion"
+                  class="bg-blue-600 px-3 py-1 rounded text-sm font-semibold"
+                >
+                  {{ emotion }}
+                </span>
+              </div>
               <span class="bg-blue-600 px-2 py-1 rounded text-sm">
                 Intensity: {{ entry.intensity }}/10
               </span>
@@ -232,6 +240,24 @@ const form = ref({
 
 // Check if we're in edit mode
 const isEditing = computed(() => !!route.query.editId)
+
+// Get emotions from entry (handles both old string format and new array format)
+function getEmotions(entry) {
+  if (Array.isArray(entry.emotions)) {
+    return entry.emotions
+  }
+  // Backward compatibility: if old entry has emotion string, convert to array
+  if (entry.emotion) {
+    return [entry.emotion]
+  }
+  return []
+}
+
+// Format date for display
+function formatDate(dateString) {
+  const date = new Date(dateString)
+  return date.toLocaleString()
+}
 
 // Load entry data if editing
 onMounted(() => {
