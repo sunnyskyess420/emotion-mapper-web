@@ -499,11 +499,17 @@ function exportCSV() {
 
 // Initialize intensity trend chart
 function initIntensityChart() {
-  if (!intensityChart.value || entries.value.length === 0) return
+  console.log('initIntensityChart called, intensityChart.value:', intensityChart.value, 'entries.value.length:', entries.value?.length)
+  if (!intensityChart.value || entries.value.length === 0) {
+    console.log('initIntensityChart returning early - no canvas or no entries')
+    return
+  }
 
   const sortedEntries = [...entries.value].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
   const labels = sortedEntries.map(entry => new Date(entry.createdAt).toLocaleDateString())
-  const data = sortedEntries.map(entry => entry.intensity)
+  const data = sortedEntries.map(entry => parseInt(entry.intensity || 0))
+
+  console.log('Intensity chart data:', { labels, data })
 
   if (intensityChartInstance) {
     intensityChartInstance.destroy()
@@ -557,7 +563,11 @@ function initIntensityChart() {
 
 // Initialize emotion distribution chart
 function initEmotionChart() {
-  if (!emotionChart.value || entries.value.length === 0) return
+  console.log('initEmotionChart called, emotionChart.value:', emotionChart.value, 'entries.value.length:', entries.value?.length)
+  if (!emotionChart.value || entries.value.length === 0) {
+    console.log('initEmotionChart returning early - no canvas or no entries')
+    return
+  }
 
   const emotionCounts = {}
   entries.value.forEach(entry => {
@@ -568,6 +578,8 @@ function initEmotionChart() {
 
   const labels = Object.keys(emotionCounts)
   const data = Object.values(emotionCounts)
+
+  console.log('Emotion chart data:', { labels, data, emotionCounts })
 
   const colors = [
     'rgb(59, 130, 246)',
