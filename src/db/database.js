@@ -25,4 +25,89 @@ db.version(5).stores({
   entries: '++id, emotion, intensity, note, createdAt, triggers, location, timeOfDay, duration, socialContext, sleepQuality, energyLevel'
 })
 
+// Add stores for saved triggers and locations
+db.version(6).stores({
+  entries: '++id, emotion, intensity, note, createdAt, triggers, location, timeOfDay, duration, socialContext, sleepQuality, energyLevel',
+  savedTriggers: '++id, value, createdAt',
+  savedLocations: '++id, value, createdAt'
+})
+
+// Helper functions for saved suggestions
+export function normalizeReusableValue(value) {
+  if (!value || typeof value !== 'string') return ''
+  return value.trim().replace(/\s+/g, ' ')
+}
+
+export async function saveTriggerSuggestion(value) {
+  const normalized = normalizeReusableValue(value)
+  if (!normalized) return
+  
+  // Check if already exists (case-insensitive)
+  const existing = await db.savedTriggers
+    .where('value')
+    .equalsIgnoreCase(normalized)
+    .first()
+  
+  if (!existing) {
+    await db.savedTriggers.add({
+      value: normalized,
+      createdAt: new Date().toISOString()
+    })
+  }
+}
+
+export async function saveLocationSuggestion(value) {
+  const normalized = normalizeReusableValue(value)
+  if (!normalized) return
+  
+  // Check if already exists (case-insensitive)
+  const existing = await db.savedLocations
+    .where('value')
+    .equalsIgnoreCase(normalized)
+    .first()
+  
+  if (!existing) {
+    await db.savedLocations.add({
+      value: normalized,
+      createdAt: new Date().toISOString()
+    })
+  }
+}
+
+export async function getTriggerSuggestions(query = '') {
+  let suggestions = await db.savedTriggers.toArray()
+  
+  if (query) {
+    const normalizedQuery = normalizeReusableValue(query).toLowerCase()
+    suggestions = suggestions.filter(s => 
+      s.value.toLowerCase().includes(normalizedQuery)
+    )
+  }
+  
+  // Sort by most recently used
+  return suggestions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+}
+
+export async function getLocationSuggestions(query = '') {
+  let suggestions = await db.savedLocations.toArray()
+  
+  if (query) {
+    const normalizedQuery = normalizeReusableValue(query).toLowerCase()
+    suggestions = suggestions.filter(s => 
+      s.value.toLowerCase().includes(normalizedQuery)
+    )
+  }
+  
+  // Sort by most recently used
+  return suggestions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+}
+
+export async function deleteTriggerSuggestion(id) {
+  await db.savedTriggers.delete(id)
+}
+
+export async function deleteLocationSuggestion(id) {
+  await db.savedLocations.delete(id)
+}
+
 export default db
