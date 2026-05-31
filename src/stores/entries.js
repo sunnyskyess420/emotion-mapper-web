@@ -38,7 +38,9 @@ export const useEntriesStore = defineStore('entries', () => {
         energyLevel: entryData.energyLevel || '',
         createdAt: new Date().toISOString()
       }
+      console.log('Saving entry:', newEntry)
       const id = await db.entries.add(newEntry)
+      console.log('Entry saved with ID:', id)
       await loadEntries() // Reload entries to show the new one
       return id
     } catch (error) {
