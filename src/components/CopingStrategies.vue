@@ -34,171 +34,324 @@
           </div>
 
           <div class="space-y-6">
-            <!-- ACCEPTS -->
-            <div>
-              <h3 class="text-lg font-semibold mb-3 text-blue-400">ACCEPTS</h3>
-              <p class="text-sm text-slate-400 mb-3">Crisis survival skills for tolerating pain</p>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <button
-                  v-for="strategy in acceptsStrategies"
-                  :key="strategy"
-                  @click="toggleStrategy(strategy)"
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm transition-all',
-                    selectedStrategies.includes(strategy)
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  ]"
-                >
-                  {{ strategy }}
-                </button>
-              </div>
-            </div>
-
-            <!-- PLEASE -->
-            <div>
-              <h3 class="text-lg font-semibold mb-3 text-purple-400">PLEASE</h3>
-              <p class="text-sm text-slate-400 mb-3">Body-focused skills to reduce vulnerability</p>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <button
-                  v-for="strategy in pleaseStrategies"
-                  :key="strategy"
-                  @click="toggleStrategy(strategy)"
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm transition-all',
-                    selectedStrategies.includes(strategy)
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  ]"
-                >
-                  {{ strategy }}
-                </button>
-              </div>
-            </div>
-
-            <!-- TIPP -->
-            <div>
-              <h3 class="text-lg font-semibold mb-3 text-orange-400">TIPP</h3>
-              <p class="text-sm text-slate-400 mb-3">Temperature, Intense exercise, Paused breathing, Paired muscle relaxation</p>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <button
-                  v-for="strategy in tippStrategies"
-                  :key="strategy"
-                  @click="toggleStrategy(strategy)"
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm transition-all',
-                    selectedStrategies.includes(strategy)
-                      ? 'bg-orange-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  ]"
-                >
-                  {{ strategy }}
-                </button>
-              </div>
-            </div>
-
-            <!-- IMPROVE -->
-            <div>
-              <h3 class="text-lg font-semibold mb-3 text-green-400">IMPROVE the Moment</h3>
-              <p class="text-sm text-slate-400 mb-3">Imagery, Meaning, Prayer, Relaxation, One thing in the moment, Vacation, Encouragement</p>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <button
-                  v-for="strategy in improveStrategies"
-                  :key="strategy"
-                  @click="toggleStrategy(strategy)"
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm transition-all',
-                    selectedStrategies.includes(strategy)
-                      ? 'bg-green-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  ]"
-                >
-                  {{ strategy }}
-                </button>
-              </div>
-            </div>
-
-            <!-- Pros & Cons -->
-            <div>
-              <h3 class="text-lg font-semibold mb-3 text-cyan-400">Pros & Cons</h3>
-              <p class="text-sm text-slate-400 mb-3">Weigh the pros and cons of tolerating vs not tolerating distress</p>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <button
-                  v-for="strategy in prosConsStrategies"
-                  :key="strategy"
-                  @click="toggleStrategy(strategy)"
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm transition-all',
-                    selectedStrategies.includes(strategy)
-                      ? 'bg-cyan-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  ]"
-                >
-                  {{ strategy }}
-                </button>
-              </div>
-            </div>
-
-            <!-- Radical Acceptance -->
-            <div>
-              <h3 class="text-lg font-semibold mb-3 text-pink-400">Radical Acceptance</h3>
-              <p class="text-sm text-slate-400 mb-3">Accept reality as it is without judgment</p>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <button
-                  v-for="strategy in radicalAcceptanceStrategies"
-                  :key="strategy"
-                  @click="toggleStrategy(strategy)"
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm transition-all',
-                    selectedStrategies.includes(strategy)
-                      ? 'bg-pink-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  ]"
-                >
-                  {{ strategy }}
-                </button>
-              </div>
-            </div>
-
             <!-- Mindfulness -->
             <div>
-              <h3 class="text-lg font-semibold mb-3 text-yellow-400">Mindfulness Skills</h3>
-              <p class="text-sm text-slate-400 mb-3">Observe, Describe, Participate - Non-judgmentally, One-mindfully, Effectively</p>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <button
-                  v-for="strategy in mindfulnessStrategies"
-                  :key="strategy"
-                  @click="toggleStrategy(strategy)"
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm transition-all',
-                    selectedStrategies.includes(strategy)
-                      ? 'bg-yellow-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  ]"
-                >
-                  {{ strategy }}
-                </button>
+              <h3 class="text-lg font-semibold mb-3 text-blue-400">Mindfulness</h3>
+              <div class="space-y-3">
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">Wise Mind</h4>
+                  <p class="text-xs text-slate-400 mb-1">The balance between the emotional mind and the reasonable mind</p>
+                  <p class="text-xs text-slate-400">The wisdom within</p>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">"What" Skills</h4>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      v-for="strategy in whatSkills"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">"How" Skills</h4>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      v-for="strategy in howSkills"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- Self-Soothe -->
+            <!-- Interpersonal Effectiveness -->
             <div>
-              <h3 class="text-lg font-semibold mb-3 text-indigo-400">Self-Soothe</h3>
-              <p class="text-sm text-slate-400 mb-3">Use your five senses to comfort yourself</p>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <button
-                  v-for="strategy in selfSootheStrategies"
-                  :key="strategy"
-                  @click="toggleStrategy(strategy)"
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm transition-all',
-                    selectedStrategies.includes(strategy)
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  ]"
-                >
-                  {{ strategy }}
-                </button>
+              <h3 class="text-lg font-semibold mb-3 text-purple-400">Interpersonal Effectiveness</h3>
+              <div class="space-y-3">
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">DEAR MAN</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in dearManStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">GIVE</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in giveStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">FAST</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in fastStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Emotional Regulation -->
+            <div>
+              <h3 class="text-lg font-semibold mb-3 text-orange-400">Emotional Regulation</h3>
+              <div class="space-y-3">
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">VITALS to success</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in vitalsStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">The ABC's of DBT</h4>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      v-for="strategy in abcStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">PLEASE</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in pleaseStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">Other Skills</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in otherEmotionStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Distress Tolerance -->
+            <div>
+              <h3 class="text-lg font-semibold mb-3 text-green-400">Distress Tolerance</h3>
+              <div class="space-y-3">
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">TIPP</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in tippStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-green-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">STOP</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in stopStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-green-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">ACCEPTS</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in acceptsStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-green-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">IMPROVE</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in improveStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-green-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">Thought Modification</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in thoughtModificationStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-green-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">Self-Soothe with the 5 Senses</h4>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      v-for="strategy in selfSootheStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-green-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-slate-700 rounded p-3">
+                  <h4 class="font-semibold text-sm mb-2">Other Skills</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="strategy in otherDistressStrategies"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-green-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -244,37 +397,72 @@ watch(() => props.modelValue, (newVal) => {
   selectedStrategies.value = [...newVal]
 })
 
-const acceptsStrategies = [
-  'Activities', 'Contributing', 'Comparisons', 'Emotions', 'Push away', 'Thoughts', 'Sensations'
+// Mindfulness
+const whatSkills = [
+  'Observe', 'Describe', 'Participate'
+]
+
+const howSkills = [
+  'One-mindfully', 'Non-judgmentally', 'Effectively'
+]
+
+// Interpersonal Effectiveness
+const dearManStrategies = [
+  'D: Describe the situation', 'E: Express your feelings', 'A: Assert yourself', 'R: Reinforce the person', 'M: Mindful, focus on goals', 'A: Appear confident', 'N: Negotiate, give to get'
+]
+
+const giveStrategies = [
+  'G: Gentle, be nice', 'I: Interested, listen', 'V: Validate, be understanding', 'E: Easy manner, use humor'
+]
+
+const fastStrategies = [
+  'F: Fair, to yourself and others', 'A: Apologies, only if necessary', 'S: Stick to your values', 'T: Truthful'
+]
+
+// Emotional Regulation
+const vitalsStrategies = [
+  'V: Validate yourself', 'I: Imagine success', 'T: Take small steps', 'A: Applaud yourself', 'L: Lighten the load', 'S: Sweeten the pot'
+]
+
+const abcStrategies = [
+  'A: Accumulate positive experiences', 'B: Build mastery', 'C: Cope for emotional events'
 ]
 
 const pleaseStrategies = [
-  'Treat Physical Illness', 'Eating balanced', 'Avoid mood-altering drugs', 'Sleep', 'Exercise'
+  'P: Treat physical illness, see doctor, take meds', 'E/L as written on sheet: Eating balanced', 'A: Avoid alternative drugs', 'S: Sleep balanced', 'E: Exercise consistently'
 ]
 
+const otherEmotionStrategies = [
+  'Check the facts', 'Act Opposite to Emotion', 'Experience your emotions and urges as waves', 'Thoughts, feelings, and emotions are not facts', 'Loving emotions: experience, don\'t judge, accept'
+]
+
+// Distress Tolerance
 const tippStrategies = [
-  'Temperature change', 'Intense exercise', 'Paused breathing', 'Progressive muscle relaxation'
+  'T: Tip the temperature', 'I: Intense exercise', 'P: Paced breathing', 'P: Progressive muscle relaxation'
+]
+
+const stopStrategies = [
+  'S: Stop what you\'re doing', 'T: Take a step back', 'O: Observe', 'P: Proceed mindfully'
+]
+
+const acceptsStrategies = [
+  'A: Activities', 'C: Contributions', 'C: Comparison', 'E: Emotion opposites', 'P: Pushing away', 'T: Thoughts', 'S: Sensations'
 ]
 
 const improveStrategies = [
-  'Imagery', 'Meaning', 'Prayer', 'Relaxation', 'One thing in the moment', 'Vacation', 'Encouragement'
+  'I: Imagery', 'M: Meaning', 'P: Prayer', 'R: Relaxation', 'O: One thing at a time', 'V: Vacation', 'E: Encouragement'
 ]
 
-const prosConsStrategies = [
-  'List pros of tolerating', 'List cons of tolerating', 'List pros of not tolerating', 'List cons of not tolerating'
-]
-
-const radicalAcceptanceStrategies = [
-  'Accept reality', 'Turn the mind', 'Willingness', 'Half-smile', 'Awareness hands'
-]
-
-const mindfulnessStrategies = [
-  'Observe', 'Describe', 'Participate', 'Non-judgmental stance', 'One-mindfully', 'Effectively'
+const thoughtModificationStrategies = [
+  'Radical acceptance', 'Turn the mind to acceptance', 'Pain + non-acceptance = suffering'
 ]
 
 const selfSootheStrategies = [
-  'Vision (look at nature, art)', 'Hearing (music, sounds)', 'Smell (scents, aromas)', 
-  'Taste (favorite foods)', 'Touch (textures, comfort objects)'
+  'Vision', 'Touch', 'Hearing', 'Smell', 'Taste'
+]
+
+const otherDistressStrategies = [
+  'Pros/Cons', 'Half smile / willing hands', 'Observe the breath'
 ]
 
 function toggleStrategy(strategy) {
