@@ -10,13 +10,18 @@ export const useEntriesStore = defineStore('entries', () => {
   // Function to load all entries from database
   async function loadEntries() {
     try {
+      console.log('Loading entries...')
       isLoading.value = true
       const allEntries = await db.entries.toArray()
+      console.log('Loaded entries:', allEntries)
       entries.value = allEntries.sort((a, b) => b.id - a.id) // Show newest first
+      console.log('Sorted entries:', entries.value)
     } catch (error) {
       console.error('Error loading entries:', error)
+      entries.value = [] // Set to empty array on error
     } finally {
       isLoading.value = false
+      console.log('Loading complete, isLoading:', isLoading.value)
     }
   }
 
