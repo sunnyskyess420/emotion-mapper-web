@@ -1,13 +1,30 @@
 # Emotion Mapper Web 🎭
 
-A modern, privacy-focused emotion tracking web application. Track your emotional patterns, identify triggers, and gain insights into your mental well-being.
+A modern, privacy-focused emotion tracking web application. Track your emotional patterns, identify triggers, and gain insights into your mental well-being with evidence-based DBT coping strategies.
 
 **Live Demo:** https://sunnyskyess420.github.io/emotion-mapper-web/
 
 ## ✨ Features
 
 - **Emotion Wheel Picker** - Interactive popup with 50+ emotions organized by categories (Core, Positive, Negative, Calm, High Energy). Select multiple emotions at once for comprehensive tracking
-- **Emotion Entry Form** - Log emotions with 12 detailed fields including intensity, physical sensations, triggers, location, time of day, coping strategies, and more
+- **Physical Sensations Tracker** - Categorized body signals including:
+  - Head & Face (headache, jaw clenching, teeth grinding, forehead tension, eye strain)
+  - Chest & Heart (tight chest, heart pounding, chest pressure, rapid heartbeat)
+  - Stomach & Digestive (butterflies, nausea, stomach pain, digestive issues)
+  - Muscles & Tension (tight shoulders, neck tension, back pain, clenched fists, muscle tension)
+  - Breathing (shortness of breath, shallow breathing, rapid breathing, paused breathing)
+  - Skin & Temperature (sweating, hot flashes, cold chills, skin sensitivity)
+  - Energy & Fatigue (shaking, trembling, weakness, fatigue, restlessness)
+- **DBT Coping Strategies** - Evidence-based skills including:
+  - ACCEPTS (Activities, Contributing, Comparisons, Emotions, Push away, Thoughts, Sensations)
+  - PLEASE (Treat Physical Illness, Eating, Avoid mood-altering drugs, Sleep, Exercise)
+  - TIPP (Temperature, Intense exercise, Paced breathing, Paused muscle relaxation)
+  - IMPROVE (Imagery, Meaning, Prayer, Relaxation, One thing in the moment, Vacation, Encouragement)
+  - Pros & Cons analysis
+  - Radical Acceptance
+  - Mindfulness skills
+  - Self-Soothe techniques
+- **Emotion Entry Form** - Log emotions with 12 detailed fields including intensity, triggers, location, time of day, coping strategies, and more
 - **History & Analytics** - View all your entries with powerful search and filtering capabilities
 - **Visual Analytics** - Interactive charts showing intensity trends over time and emotion distribution
 - **Data Export** - Export your data as JSON or CSV for backup or analysis
@@ -38,15 +55,15 @@ A modern, privacy-focused emotion tracking web application. Track your emotional
    - Set the intensity level (1-10)
    - Add a short note about how you're feeling
    - Optionally fill in additional details:
-     - Physical sensations (e.g., "tight chest", "relaxed muscles")
-     - Triggers (e.g., "work deadline", "family gathering")
-     - Location (e.g., "home", "office", "coffee shop")
-     - Time of day (e.g., "morning", "afternoon", "evening")
-     - Coping strategies used
-     - Duration of the emotion
-     - Social context (e.g., "alone", "with friends")
-     - Sleep quality
-     - Energy level
+     - **Physical Sensations** - Click to select from categorized body signals (head & face, chest & heart, stomach & digestive, muscles & tension, breathing, skin & temperature, energy & fatigue)
+     - **Triggers** (e.g., "work deadline", "family gathering")
+     - **Location** (e.g., "home", "office", "coffee shop")
+     - **Time of day** (e.g., "morning", "afternoon", "evening")
+     - **Coping Strategies** - Click to select DBT skills (ACCEPTS, PLEASE, TIPP, IMPROVE, and more)
+     - **Duration** of the emotion
+     - **Social context** (e.g., "alone", "with friends")
+     - **Sleep quality**
+     - **Energy level**
    - Click "Save Entry"
 
 3. **View Your History**
