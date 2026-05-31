@@ -5,9 +5,9 @@ const db = new Dexie('emotionMapperDB')
 
 // Define database schema
 // This creates a table called 'entries' with auto-incrementing ID
-// Keep both emotion (old) and emotions (new) for backward compatibility
+// Note: emotions is not indexed because IndexedDB cannot index arrays
 db.version(3).stores({
-  entries: '++id, emotion, emotions, intensity, note, createdAt, physicalSensations, triggers, location, timeOfDay, copingStrategies, duration, socialContext, sleepQuality, energyLevel'
+  entries: '++id, emotion, intensity, note, createdAt, physicalSensations, triggers, location, timeOfDay, copingStrategies, duration, socialContext, sleepQuality, energyLevel'
 })
 
 export default db
