@@ -302,7 +302,7 @@ const mostCommonEmotion = computed(() => {
 const averageIntensity = computed(() => {
   if (!entries.value || entries.value.length === 0) return 0
   
-  const total = entries.value.reduce((sum, entry) => sum + entry.intensity, 0)
+  const total = entries.value.reduce((sum, entry) => sum + parseInt(entry.intensity || 0), 0)
   return (total / entries.value.length).toFixed(1)
 })
 
