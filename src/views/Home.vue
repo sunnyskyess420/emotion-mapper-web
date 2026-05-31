@@ -10,6 +10,16 @@
         <p class="text-slate-300 mb-4">
           A local-first emotional mapping application to help you understand and regulate your nervous system responses over time.
         </p>
+        
+        <h3 class="text-xl font-semibold mb-3 mt-6">Key Features</h3>
+        <ul class="list-disc list-inside text-slate-300 space-y-2 mb-4">
+          <li><strong>Emotion Wheel Picker</strong> - Select from 50+ emotions organized by categories</li>
+          <li><strong>Physical Sensations</strong> - Track body signals with categorized sensations (head, chest, muscles, breathing, etc.)</li>
+          <li><strong>DBT Coping Strategies</strong> - Log evidence-based coping skills (ACCEPTS, PLEASE, TIPP, IMPROVE, and more)</li>
+          <li><strong>Visual Analytics</strong> - Charts showing intensity trends and emotion distribution</li>
+          <li><strong>Privacy First</strong> - All data stored locally in your browser</li>
+        </ul>
+        
         <p class="text-slate-300">
           Use the navigation above to explore the application.
         </p>
