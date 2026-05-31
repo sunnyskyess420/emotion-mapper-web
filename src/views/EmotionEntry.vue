@@ -203,6 +203,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { useEntriesStore } from '../stores/entries'
 import EmotionWheel from '../components/EmotionWheel.vue'
 import PhysicalSensations from '../components/PhysicalSensations.vue'
@@ -211,6 +212,7 @@ import CopingStrategies from '../components/CopingStrategies.vue'
 const route = useRoute()
 const router = useRouter()
 const entriesStore = useEntriesStore()
+const { entries } = storeToRefs(entriesStore)
 
 // Form data
 const form = ref({
@@ -227,9 +229,6 @@ const form = ref({
   sleepQuality: '',
   energyLevel: ''
 })
-
-// Get entries from store
-const entries = entriesStore.entries
 
 // Check if we're in edit mode
 const isEditing = computed(() => !!route.query.editId)
