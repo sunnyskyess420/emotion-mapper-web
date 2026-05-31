@@ -121,7 +121,15 @@
               class="bg-slate-700 rounded-lg p-4"
             >
               <div class="flex justify-between items-start mb-2">
-                <h3 class="font-semibold text-lg">{{ entry.emotion }}</h3>
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    v-for="emotion in getEmotions(entry)"
+                    :key="emotion"
+                    class="bg-blue-600 px-3 py-1 rounded text-sm font-semibold"
+                  >
+                    {{ emotion }}
+                  </span>
+                </div>
                 <span class="bg-blue-600 px-3 py-1 rounded text-sm">
                   Intensity: {{ entry.intensity }}/10
                 </span>
@@ -217,10 +225,14 @@ const mostCommonEmotion = computed(() => {
   
   const emotionCounts = {}
   entries.value.forEach(entry => {
-    emotionCounts[entry.emotion] = (emotionCounts[entry.emotion] || 0) + 1
+    getEmotions(entry).forEach(emotion => {
+      emotionCounts[emotion] = (emotionCounts[emotion] || 0) + 1
+    })
   })
   
-  return Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])[0][0]
+  const entries = Object.entries(emotionCounts)
+  if (entries.length === 0) return 'N/A'
+  return entries.sort((a, b) => b[1] - a[1])[0][0]
 })
 
 // Calculate average intensity
@@ -234,7 +246,10 @@ const averageIntensity = computed(() => {
 // Get unique emotions for filter dropdown
 const uniqueEmotions = computed(() => {
   if (!entries.value) return []
-  const emotions = new Set(entries.value.map(entry => entry.emotion))
+  const emotions = new Set()
+  entries.value.forEach(entry => {
+    getEmotions(entry).forEach(e => emotions.add(e))
+  })
   return Array.from(emotions).sort()
 })
 
@@ -243,11 +258,13 @@ const filteredEntries = computed(() => {
   if (!entries.value) return []
   
   return entries.value.filter(entry => {
+    const emotions = getEmotions(entry)
+    
     // Search filter
     if (searchQuery.value) {
       const query = searchQuery.value.toLowerCase()
       const matchesSearch = 
-        entry.emotion.toLowerCase().includes(query) ||
+        emotions.some(e => e.toLowerCase().includes(query)) ||
         entry.note.toLowerCase().includes(query) ||
         (entry.physicalSensations && entry.physicalSensations.toLowerCase().includes(query)) ||
         (entry.triggers && entry.triggers.toLowerCase().includes(query)) ||
@@ -256,7 +273,7 @@ const filteredEntries = computed(() => {
     }
 
     // Emotion filter
-    if (selectedEmotion.value && entry.emotion !== selectedEmotion.value) {
+    if (selectedEmotion.value && !emotions.includes(selectedEmotion.value)) {
       return false
     }
 
@@ -300,6 +317,18 @@ function hasAdditionalDetails(entry) {
          entry.energyLevel
 }
 
+// Get emotions from entry (handles both old string format and new array format)
+function getEmotions(entry) {
+  if (Array.isArray(entry.emotions)) {
+    return entry.emotions
+  }
+  // Backward compatibility: if old entry has emotion string, convert to array
+  if (entry.emotion) {
+    return [entry.emotion]
+  }
+  return []
+}
+
 // Delete an entry
 async function deleteEntry(id) {
   if (confirm('Are you sure you want to delete this entry?')) {
@@ -341,10 +370,10 @@ function exportCSV() {
     return
   }
 
-  const headers = ['ID', 'Emotion', 'Intensity', 'Note', 'Physical Sensations', 'Triggers', 'Location', 'Time of Day', 'Coping Strategies', 'Duration', 'Social Context', 'Sleep Quality', 'Energy Level', 'Created At']
+  const headers = ['ID', 'Emotions', 'Intensity', 'Note', 'Physical Sensations', 'Triggers', 'Location', 'Time of Day', 'Coping Strategies', 'Duration', 'Social Context', 'Sleep Quality', 'Energy Level', 'Created At']
   const rows = entries.value.map(entry => [
     entry.id,
-    entry.emotion,
+    getEmotions(entry).join('; '),
     entry.intensity,
     entry.note,
     entry.physicalSensations || '',
@@ -439,7 +468,9 @@ function initEmotionChart() {
 
   const emotionCounts = {}
   entries.value.forEach(entry => {
-    emotionCounts[entry.emotion] = (emotionCounts[entry.emotion] || 0) + 1
+    getEmotions(entry).forEach(emotion => {
+      emotionCounts[emotion] = (emotionCounts[emotion] || 0) + 1
+    })
   })
 
   const labels = Object.keys(emotionCounts)
