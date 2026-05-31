@@ -23,11 +23,31 @@
         <p class="text-slate-300">
           Use the navigation above to start an entry, review history, or learn more about the app.
         </p>
+
+        <div v-if="isGuest" class="mt-6 pt-6 border-t border-slate-700">
+          <button 
+            @click="goToAuth"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+          >
+            Upgrade to Cloud Account
+          </button>
+          <p class="text-slate-400 text-sm text-center mt-2">
+            Get cross-device sync and cloud backup
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// Home page component
+import { useRouter } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
+
+const router = useRouter()
+const { isGuest } = useAuth()
+
+function goToAuth() {
+  router.push('/auth')
+}
 </script>
