@@ -139,8 +139,17 @@
               <!-- Additional Details -->
               <div v-if="hasAdditionalDetails(entry)" class="mt-3 pt-3 border-t border-slate-600">
                 <div class="grid grid-cols-2 gap-2 text-xs">
-                  <div v-if="entry.physicalSensations" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Sensations:</span> {{ entry.physicalSensations }}
+                  <div v-if="getPhysicalSensations(entry).length > 0" class="text-slate-400">
+                    <span class="font-medium text-slate-300">Sensations:</span>
+                    <div class="flex flex-wrap gap-1 mt-1">
+                      <span
+                        v-for="sensation in getPhysicalSensations(entry)"
+                        :key="sensation"
+                        class="bg-purple-600 px-2 py-0.5 rounded text-xs"
+                      >
+                        {{ sensation }}
+                      </span>
+                    </div>
                   </div>
                   <div v-if="entry.triggers" class="text-slate-400">
                     <span class="font-medium text-slate-300">Triggers:</span> {{ entry.triggers }}
@@ -164,8 +173,17 @@
                     <span class="font-medium text-slate-300">Energy:</span> {{ entry.energyLevel }}
                   </div>
                 </div>
-                <div v-if="entry.copingStrategies" class="text-slate-400 text-xs mt-2">
-                  <span class="font-medium text-slate-300">Coping:</span> {{ entry.copingStrategies }}
+                <div v-if="getCopingStrategies(entry).length > 0" class="text-slate-400 text-xs mt-2">
+                  <span class="font-medium text-slate-300">Coping:</span>
+                  <div class="flex flex-wrap gap-1 mt-1">
+                    <span
+                      v-for="strategy in getCopingStrategies(entry)"
+                      :key="strategy"
+                      class="bg-green-600 px-2 py-0.5 rounded text-xs"
+                    >
+                      {{ strategy }}
+                    </span>
+                  </div>
                 </div>
               </div>
               
@@ -231,6 +249,30 @@ function getEmotions(entry) {
   return []
 }
 
+// Get physical sensations from entry (handles both old string format and new array format)
+function getPhysicalSensations(entry) {
+  if (Array.isArray(entry.physicalSensations)) {
+    return entry.physicalSensations
+  }
+  // Backward compatibility: if old entry has string, convert to array
+  if (entry.physicalSensations) {
+    return [entry.physicalSensations]
+  }
+  return []
+}
+
+// Get coping strategies from entry (handles both old string format and new array format)
+function getCopingStrategies(entry) {
+  if (Array.isArray(entry.copingStrategies)) {
+    return entry.copingStrategies
+  }
+  // Backward compatibility: if old entry has string, convert to array
+  if (entry.copingStrategies) {
+    return [entry.copingStrategies]
+  }
+  return []
+}
+
 // Calculate most common emotion
 const mostCommonEmotion = computed(() => {
   if (isLoading.value) return 'Loading...'
@@ -289,6 +331,8 @@ const filteredEntries = computed(() => {
     
     return entries.value.filter(entry => {
       const emotions = getEmotions(entry)
+      const sensations = getPhysicalSensations(entry)
+      const strategies = getCopingStrategies(entry)
       
       // Search filter
       if (searchQuery.value) {
@@ -296,7 +340,8 @@ const filteredEntries = computed(() => {
         const matchesSearch = 
           (Array.isArray(emotions) && emotions.some(e => e.toLowerCase().includes(query))) ||
           entry.note.toLowerCase().includes(query) ||
-          (entry.physicalSensations && entry.physicalSensations.toLowerCase().includes(query)) ||
+          (Array.isArray(sensations) && sensations.some(s => s.toLowerCase().includes(query))) ||
+          (Array.isArray(strategies) && strategies.some(s => s.toLowerCase().includes(query))) ||
           (entry.triggers && entry.triggers.toLowerCase().includes(query)) ||
           (entry.location && entry.location.toLowerCase().includes(query))
         if (!matchesSearch) return false
@@ -340,11 +385,11 @@ function formatDate(dateString) {
 
 // Check if entry has additional details to display
 function hasAdditionalDetails(entry) {
-  return entry.physicalSensations || 
+  return getPhysicalSensations(entry).length > 0 ||
          entry.triggers || 
          entry.location || 
          entry.timeOfDay || 
-         entry.copingStrategies || 
+         getCopingStrategies(entry).length > 0 ||
          entry.duration || 
          entry.socialContext || 
          entry.sleepQuality || 
@@ -402,11 +447,11 @@ function exportCSV() {
       getEmotions(entry).join('; '),
       entry.intensity,
       entry.note,
-      entry.physicalSensations || '',
+      getPhysicalSensations(entry).join('; '),
       entry.triggers || '',
       entry.location || '',
       entry.timeOfDay || '',
-      entry.copingStrategies || '',
+      getCopingStrategies(entry).join('; '),
       entry.duration || '',
       entry.socialContext || '',
       entry.sleepQuality || '',
