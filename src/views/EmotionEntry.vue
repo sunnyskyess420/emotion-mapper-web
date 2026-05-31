@@ -9,13 +9,8 @@
         
         <!-- Emotion Name -->
         <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">Emotion Name</label>
-          <input 
-            v-model="form.emotion"
-            type="text"
-            placeholder="e.g., Happy, Anxious, Calm"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-          >
+          <label class="block text-sm font-medium mb-2">Emotions</label>
+          <EmotionWheel v-model="form.emotions" />
         </div>
         
         <!-- Intensity Slider -->
@@ -219,6 +214,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useEntriesStore } from '../stores/entries'
+import EmotionWheel from '../components/EmotionWheel.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -226,7 +222,7 @@ const entriesStore = useEntriesStore()
 
 // Form data
 const form = ref({
-  emotion: '',
+  emotions: [],
   intensity: 5,
   note: '',
   physicalSensations: '',
@@ -252,7 +248,7 @@ onMounted(() => {
     const entryToEdit = entries.value?.find(e => e.id === parseInt(route.query.editId))
     if (entryToEdit) {
       form.value = {
-        emotion: entryToEdit.emotion,
+        emotions: Array.isArray(entryToEdit.emotions) ? entryToEdit.emotions : (entryToEdit.emotion ? [entryToEdit.emotion] : []),
         intensity: entryToEdit.intensity,
         note: entryToEdit.note,
         physicalSensations: entryToEdit.physicalSensations || '',
@@ -271,8 +267,8 @@ onMounted(() => {
 
 // Save entry function
 async function saveEntry() {
-  if (!form.value.emotion.trim()) {
-    window.showToast('Please enter an emotion name', 'error')
+  if (!form.value.emotions || form.value.emotions.length === 0) {
+    window.showToast('Please select at least one emotion', 'error')
     return
   }
   
@@ -280,7 +276,7 @@ async function saveEntry() {
     if (isEditing.value) {
       // Update existing entry
       await entriesStore.updateEntry(parseInt(route.query.editId), {
-        emotion: form.value.emotion,
+        emotions: form.value.emotions,
         intensity: form.value.intensity,
         note: form.value.note,
         physicalSensations: form.value.physicalSensations,
@@ -298,7 +294,7 @@ async function saveEntry() {
     } else {
       // Create new entry
       await entriesStore.saveEntry({
-        emotion: form.value.emotion,
+        emotions: form.value.emotions,
         intensity: form.value.intensity,
         note: form.value.note,
         physicalSensations: form.value.physicalSensations,
@@ -314,7 +310,7 @@ async function saveEntry() {
       
       // Clear form after saving
       form.value = {
-        emotion: '',
+        emotions: [],
         intensity: 5,
         note: '',
         physicalSensations: '',
