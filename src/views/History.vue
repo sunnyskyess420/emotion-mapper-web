@@ -230,9 +230,9 @@ const mostCommonEmotion = computed(() => {
     })
   })
   
-  const entries = Object.entries(emotionCounts)
-  if (entries.length === 0) return 'N/A'
-  return entries.sort((a, b) => b[1] - a[1])[0][0]
+  const emotionEntries = Object.entries(emotionCounts)
+  if (emotionEntries.length === 0) return 'N/A'
+  return emotionEntries.sort((a, b) => b[1] - a[1])[0][0]
 })
 
 // Calculate average intensity
