@@ -259,6 +259,7 @@ onMounted(() => {
 
 // Save entry function
 async function saveEntry() {
+  console.log('Saving entry, form.value.emotions:', form.value.emotions)
   if (!form.value.emotions || form.value.emotions.length === 0) {
     window.showToast('Please select at least one emotion', 'error')
     return
@@ -285,6 +286,7 @@ async function saveEntry() {
       router.push('/history')
     } else {
       // Create new entry
+      console.log('Creating new entry with emotions:', form.value.emotions)
       await entriesStore.saveEntry({
         emotions: form.value.emotions,
         intensity: form.value.intensity,
