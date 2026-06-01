@@ -5,4 +5,9 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
   base: './',
+  build: {
+    rolldownOptions: {
+      external: ['dexie-cloud-addon']
+    }
+  }
 })
