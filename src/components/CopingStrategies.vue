@@ -447,10 +447,10 @@ const abcStrategies = [
 
 const pleaseStrategies = [
   'P – Treat Physical Illness',
-  'L – Balance Eating',
-  'E – Avoid Mood-Altering Substances',
-  'S – Balance Sleep',
-  'E – Exercise'
+  'LE – Balanced Eating',
+  'A – Avoid Mood-altering Substances',
+  'S – Sleep Enough',
+  'E – Exercise regularly'
 ]
 
 const otherEmotionStrategies = [
