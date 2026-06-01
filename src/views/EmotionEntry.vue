@@ -300,7 +300,7 @@ function getEmotions(entry) {
 
 // Load saved suggestions
 async function loadSavedSuggestions() {
-  const db = await initDatabase(localStorage.getItem('authMode') || 'guest')
+  const db = await initDatabase()
   savedTriggers.value = await getTriggerSuggestions()
   savedLocations.value = await getLocationSuggestions()
 }

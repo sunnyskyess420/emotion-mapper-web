@@ -9,7 +9,7 @@ export const useEntriesStore = defineStore('entries', () => {
 
   // Get current database instance
   async function getDb() {
-    return await initDatabase(localStorage.getItem('authMode') || 'guest')
+    return await initDatabase()
   }
 
   // Function to load all entries from database

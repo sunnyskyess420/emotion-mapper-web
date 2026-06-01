@@ -18,22 +18,7 @@
             </router-link>
           </div>
           <div class="flex items-center gap-4">
-            <span v-if="isGuest" class="text-slate-400 text-sm">Guest Mode</span>
-            <span v-else-if="isSignedIn" class="text-slate-400 text-sm">{{ userEmail }}</span>
-            <button 
-              v-if="isGuest"
-              @click="goToAuth"
-              class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors"
-            >
-              Sign In
-            </button>
-            <button 
-              v-else-if="isSignedIn"
-              @click="signOut"
-              class="bg-slate-600 hover:bg-slate-700 text-white text-sm px-3 py-1 rounded transition-colors"
-            >
-              Sign Out
-            </button>
+            <span class="text-slate-400 text-sm">Local Mode</span>
           </div>
         </div>
       </div>
@@ -51,12 +36,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import Toast from './components/Toast.vue'
-import { useAuth } from './composables/useAuth'
-
-const router = useRouter()
-const { isGuest, isSignedIn, userEmail, signOut } = useAuth()
 
 const toastMessage = ref('')
 const toastType = ref('success')
@@ -65,10 +45,6 @@ const toastType = ref('success')
 window.showToast = (message, type = 'success') => {
   toastMessage.value = message
   toastType.value = type
-}
-
-function goToAuth() {
-  router.push('/auth')
 }
 </script>
 

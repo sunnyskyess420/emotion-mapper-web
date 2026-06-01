@@ -1,31 +1,17 @@
 import Dexie from 'dexie'
-import dexieCloud from 'dexie-cloud-addon'
 
 let db = null
 
-// Initialize database based on auth mode
-export async function initDatabase(authMode = 'guest') {
+// Initialize database (local-only mode)
+export async function initDatabase() {
   // Close existing database if open
   if (db) {
     db.close()
   }
 
-  // Use different database names for guest vs signed-in to prevent data mixing
-  const dbName = authMode === 'signed-in' ? 'emotionMapperDB' : 'emotionMapperDB_guest'
+  // Use single database name for local-only mode
+  const dbName = 'emotionMapperDB'
   db = new Dexie(dbName)
-
-  // Add Dexie Cloud addon only for signed-in mode
-  if (authMode === 'signed-in') {
-    const databaseUrl = import.meta.env.VITE_DEXIE_CLOUD_URL || 'https://your-app.dexie.cloud'
-    console.log('Initializing Dexie Cloud with URL:', databaseUrl)
-    
-    db.use(dexieCloud, {
-      databaseUrl: databaseUrl,
-      requireAuth: true
-    })
-    
-    console.log('Dexie Cloud initialized, db.cloud:', db.cloud)
-  }
 
   // Define database schema with upgrade handler
   db.version(1).stores({
@@ -60,8 +46,7 @@ export async function initDatabase(authMode = 'guest') {
 }
 
 // Initialize database on first load
-const authMode = localStorage.getItem('authMode') || 'guest'
-db = await initDatabase(authMode)
+db = await initDatabase()
 
 // Helper functions for saved suggestions
 export function normalizeReusableValue(value) {
