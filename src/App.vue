@@ -5,16 +5,16 @@
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center gap-8">
             <router-link to="/" class="hover:text-blue-400 font-semibold transition-colors duration-200">
-              Home
+              🎭 Home
             </router-link>
             <router-link to="/emotion-entry" class="hover:text-blue-400 font-semibold transition-colors duration-200">
-              Emotion Entry
+              🎭 Emotion Entry
             </router-link>
             <router-link to="/history" class="hover:text-blue-400 font-semibold transition-colors duration-200">
-              History
+              🎭 History
             </router-link>
             <router-link to="/about" class="hover:text-blue-400 font-semibold transition-colors duration-200">
-              About
+              🎭 About
             </router-link>
           </div>
           <div class="flex items-center gap-4">
