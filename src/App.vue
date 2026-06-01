@@ -49,8 +49,19 @@ window.showToast = (message, type = 'success') => {
 </script>
 
 <style>
+/* Global Background Image - Change this URL to swap the background image */
+:root {
+  --site-background-image: url('/images/site_bg.png');
+}
+
 /* Zen Theme Base Styles */
 .zen-background {
+  background-image: var(--site-background-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* Fallback gradient if image doesn't load */
   background:
     radial-gradient(circle at 20% 18%, rgba(143, 170, 152, 0.16), transparent 28%),
     radial-gradient(circle at 82% 24%, rgba(169, 150, 194, 0.14), transparent 24%),
