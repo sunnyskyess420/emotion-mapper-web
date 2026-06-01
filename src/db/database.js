@@ -1,5 +1,5 @@
 import Dexie from 'dexie'
-import dexieCloud from 'dexie-cloud-addon'
+import { dexieCloud } from 'dexie-cloud-addon'
 
 let db = null
 
