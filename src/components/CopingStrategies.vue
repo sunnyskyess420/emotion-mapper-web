@@ -39,9 +39,22 @@
               <h3 class="text-lg font-semibold mb-3 text-blue-400">Mindfulness</h3>
               <div class="space-y-3">
                 <div class="bg-slate-700 rounded p-3">
-                  <h4 class="font-semibold text-sm mb-2">Wise Mind</h4>
-                  <p class="text-xs text-slate-400 mb-1">The balance between the emotional mind and the reasonable mind</p>
-                  <p class="text-xs text-slate-400">The wisdom within</p>
+                  <h4 class="font-semibold text-sm mb-2">Core Skills</h4>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      v-for="strategy in mindfulnessSkills"
+                      :key="strategy"
+                      @click="toggleStrategy(strategy)"
+                      :class="[
+                        'px-3 py-1 rounded text-xs transition-all',
+                        selectedStrategies.includes(strategy)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
+                      ]"
+                    >
+                      {{ strategy }}
+                    </button>
+                  </div>
                 </div>
                 <div class="bg-slate-700 rounded p-3">
                   <h4 class="font-semibold text-sm mb-2">"What" Skills</h4>
@@ -398,6 +411,10 @@ watch(() => props.modelValue, (newVal) => {
 })
 
 // Mindfulness
+const mindfulnessSkills = [
+  'Wise Mind'
+]
+
 const whatSkills = [
   'Observe', 'Describe', 'Participate'
 ]
@@ -429,7 +446,11 @@ const abcStrategies = [
 ]
 
 const pleaseStrategies = [
-  'P: Treat physical illness, see doctor, take meds', 'E/L as written on sheet: Eating balanced', 'A: Avoid alternative drugs', 'S: Sleep balanced', 'E: Exercise consistently'
+  'P – Treat Physical Illness',
+  'L – Balance Eating',
+  'E – Avoid Mood-Altering Substances',
+  'S – Balance Sleep',
+  'E – Exercise'
 ]
 
 const otherEmotionStrategies = [
