@@ -57,25 +57,25 @@ export function useAuth() {
   }
 
   // Set guest mode
-  function setGuestMode() {
+  async function setGuestMode() {
     authMode.value = 'guest'
     user.value = null
     localStorage.setItem('authMode', 'guest')
     localStorage.removeItem('authUser')
     
     // Reinitialize database for guest mode
-    initDatabase('guest')
+    await initDatabase('guest')
   }
 
   // Set signed-in mode
-  function setSignedInMode(userData) {
+  async function setSignedInMode(userData) {
     authMode.value = 'signed-in'
     user.value = userData
     localStorage.setItem('authMode', 'signed-in')
     localStorage.setItem('authUser', JSON.stringify(userData))
     
     // Reinitialize database for signed-in mode
-    initDatabase('signed-in')
+    await initDatabase('signed-in')
   }
 
   // Sign in with Google (Dexie Cloud)
@@ -84,7 +84,7 @@ export function useAuth() {
     
     try {
       // Initialize database for signed-in mode
-      const db = initDatabase('signed-in')
+      const db = await initDatabase('signed-in')
       
       // Wait a moment for Dexie Cloud addon to initialize
       await new Promise(resolve => setTimeout(resolve, 100))
@@ -125,7 +125,7 @@ export function useAuth() {
     try {
       // Sign out from Dexie Cloud if signed in
       if (authMode.value === 'signed-in') {
-        const db = initDatabase('signed-in')
+        const db = await initDatabase('signed-in')
         
         // Wait a moment for Dexie Cloud addon to initialize
         await new Promise(resolve => setTimeout(resolve, 100))

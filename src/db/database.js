@@ -64,7 +64,7 @@ export async function initDatabase(authMode = 'guest') {
 
 // Initialize database on first load
 const authMode = localStorage.getItem('authMode') || 'guest'
-db = initDatabase(authMode)
+db = await initDatabase(authMode)
 
 // Helper functions for saved suggestions
 export function normalizeReusableValue(value) {

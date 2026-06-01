@@ -8,8 +8,8 @@ export const useEntriesStore = defineStore('entries', () => {
   const isLoading = ref(true)
 
   // Get current database instance
-  function getDb() {
-    return initDatabase(localStorage.getItem('authMode') || 'guest')
+  async function getDb() {
+    return await initDatabase(localStorage.getItem('authMode') || 'guest')
   }
 
   // Function to load all entries from database
@@ -17,7 +17,7 @@ export const useEntriesStore = defineStore('entries', () => {
     try {
       console.log('Loading entries...')
       isLoading.value = true
-      const db = getDb()
+      const db = await getDb()
       const allEntries = await db.entries.toArray()
       console.log('Loaded entries:', allEntries)
       entries.value = allEntries.sort((a, b) => b.id - a.id) // Show newest first
@@ -34,7 +34,7 @@ export const useEntriesStore = defineStore('entries', () => {
   // Function to save a new entry
   async function saveEntry(entryData) {
     try {
-      const db = getDb()
+      const db = await getDb()
       const newEntry = {
         emotions: Array.isArray(entryData.emotions) ? JSON.parse(JSON.stringify(entryData.emotions)) : [],
         intensity: entryData.intensity,
@@ -64,7 +64,7 @@ export const useEntriesStore = defineStore('entries', () => {
   // Function to delete an entry
   async function deleteEntry(id) {
     try {
-      const db = getDb()
+      const db = await getDb()
       await db.entries.delete(id)
       await loadEntries() // Reload entries after deletion
     } catch (error) {
@@ -76,7 +76,7 @@ export const useEntriesStore = defineStore('entries', () => {
   // Function to update an existing entry
   async function updateEntry(id, entryData) {
     try {
-      const db = getDb()
+      const db = await getDb()
       await db.entries.update(id, {
         emotions: Array.isArray(entryData.emotions) ? JSON.parse(JSON.stringify(entryData.emotions)) : [],
         intensity: entryData.intensity,
@@ -101,7 +101,7 @@ export const useEntriesStore = defineStore('entries', () => {
   // Function to import entries from JSON backup
   async function importEntries(importedEntries) {
     try {
-      const db = getDb()
+      const db = await getDb()
       console.log('Importing entries:', importedEntries)
       for (const entry of importedEntries) {
         // Check if entry already exists by ID
