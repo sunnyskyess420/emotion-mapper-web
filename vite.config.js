@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
-  base: './',
+  base: '/emotion-mapper-web/',
   build: {
     rolldownOptions: {
       external: ['dexie-cloud-addon']
