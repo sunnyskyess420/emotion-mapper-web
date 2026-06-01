@@ -27,6 +27,27 @@
 
       <!-- Charts Section -->
       <div v-if="entries && entries.length > 0" class="max-w-4xl mx-auto mb-8">
+        <!-- Time Range Controls -->
+        <div class="zen-card p-4 mb-4">
+          <div class="flex items-center gap-4 flex-wrap">
+            <span class="text-sm font-medium">Time Range:</span>
+            <div class="flex gap-2">
+              <button
+                v-for="range in ['30', '90', '180', 'all']"
+                :key="range"
+                @click="timeRange = range"
+                :class="[
+                  'px-3 py-1 text-sm rounded transition-all',
+                  timeRange === range
+                    ? 'zen-button-primary'
+                    : 'zen-button'
+                ]"
+              >
+                {{ range === 'all' ? 'All Time' : range + ' Days' }}
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="zen-card p-6">
             <h3 class="text-lg zen-heading mb-4">Intensity Trend</h3>
@@ -135,7 +156,7 @@
             No entries yet. Start tracking your emotions!
           </div>
           
-          <div v-else class="space-y-4">
+          <div v-else class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
             <div 
               v-for="entry in filteredEntries" 
               :key="entry.id"
@@ -258,6 +279,7 @@ let emotionChartInstance = null
 const searchQuery = ref('')
 const selectedEmotion = ref('')
 const selectedIntensity = ref('')
+const timeRange = ref('30') // 30, 90, 180, or 'all' days
 const fileInput = ref(null)
 
 // Get emotions from entry (handles both old string format and new array format)
@@ -347,15 +369,35 @@ const uniqueEmotions = computed(() => {
   }
 })
 
+// Filter entries by time range
+const entriesByTimeRange = computed(() => {
+  if (!entries.value || !Array.isArray(entries.value) || entries.value.length === 0) {
+    return entries.value
+  }
+  
+  if (timeRange.value === 'all') {
+    return entries.value
+  }
+  
+  const days = parseInt(timeRange.value)
+  const cutoffDate = new Date()
+  cutoffDate.setDate(cutoffDate.getDate() - days)
+  
+  return entries.value.filter(entry => {
+    const entryDate = new Date(entry.createdAt)
+    return entryDate >= cutoffDate
+  })
+})
+
 // Filter entries based on search and filters
 const filteredEntries = computed(() => {
   try {
-    console.log('filteredEntries called, entries.value:', entries.value)
-    console.log('entries.value length:', entries.value?.length)
-    if (!entries.value || !Array.isArray(entries.value) || entries.value.length === 0) return []
+    console.log('filteredEntries called, entriesByTimeRange.value:', entriesByTimeRange.value)
+    console.log('entriesByTimeRange.value length:', entriesByTimeRange.value?.length)
+    if (!entriesByTimeRange.value || !Array.isArray(entriesByTimeRange.value) || entriesByTimeRange.value.length === 0) return []
     
-    console.log('Processing', entries.value.length, 'entries')
-    const filtered = entries.value.filter(entry => {
+    console.log('Processing', entriesByTimeRange.value.length, 'entries')
+    const filtered = entriesByTimeRange.value.filter(entry => {
       const emotions = getEmotions(entry)
       const sensations = getPhysicalSensations(entry)
       const strategies = getCopingStrategies(entry)
@@ -411,7 +453,7 @@ const filteredEntries = computed(() => {
 
 // Check if any filters are active
 const hasActiveFilters = computed(() => {
-  return searchQuery.value || selectedEmotion.value || selectedIntensity.value
+  return searchQuery.value || selectedEmotion.value || selectedIntensity.value || timeRange.value !== '30'
 })
 
 // Clear all filters
@@ -419,6 +461,7 @@ function clearFilters() {
   searchQuery.value = ''
   selectedEmotion.value = ''
   selectedIntensity.value = ''
+  timeRange.value = '30'
 }
 
 // Format date for display
@@ -556,13 +599,13 @@ async function handleFileImport(event) {
 
 // Initialize intensity trend chart
 function initIntensityChart() {
-  console.log('initIntensityChart called, intensityChart.value:', intensityChart.value, 'entries.value.length:', entries.value?.length)
-  if (!intensityChart.value || entries.value.length === 0) {
+  console.log('initIntensityChart called, intensityChart.value:', intensityChart.value, 'entriesByTimeRange.value.length:', entriesByTimeRange.value?.length)
+  if (!intensityChart.value || !entriesByTimeRange.value || entriesByTimeRange.value.length === 0) {
     console.log('initIntensityChart returning early - no canvas or no entries')
     return
   }
 
-  const sortedEntries = [...entries.value].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+  const sortedEntries = [...entriesByTimeRange.value].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
   const labels = sortedEntries.map(entry => new Date(entry.createdAt).toLocaleDateString())
   const data = sortedEntries.map(entry => parseInt(entry.intensity || 0))
 
@@ -620,21 +663,31 @@ function initIntensityChart() {
 
 // Initialize emotion distribution chart
 function initEmotionChart() {
-  console.log('initEmotionChart called, emotionChart.value:', emotionChart.value, 'entries.value.length:', entries.value?.length)
-  if (!emotionChart.value || entries.value.length === 0) {
+  console.log('initEmotionChart called, emotionChart.value:', emotionChart.value, 'entriesByTimeRange.value.length:', entriesByTimeRange.value?.length)
+  if (!emotionChart.value || !entriesByTimeRange.value || entriesByTimeRange.value.length === 0) {
     console.log('initEmotionChart returning early - no canvas or no entries')
     return
   }
 
   const emotionCounts = {}
-  entries.value.forEach(entry => {
+  entriesByTimeRange.value.forEach(entry => {
     getEmotions(entry).forEach(emotion => {
       emotionCounts[emotion] = (emotionCounts[emotion] || 0) + 1
     })
   })
 
-  const labels = Object.keys(emotionCounts)
-  const data = Object.values(emotionCounts)
+  // Sort by frequency and take top 8
+  const sortedEmotions = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])
+  const topEmotions = sortedEmotions.slice(0, 8)
+  const otherCount = sortedEmotions.slice(8).reduce((sum, [, count]) => sum + count, 0)
+  
+  let labels = topEmotions.map(([emotion]) => emotion)
+  let data = topEmotions.map(([, count]) => count)
+  
+  if (otherCount > 0) {
+    labels.push('Other')
+    data.push(otherCount)
+  }
 
   console.log('Emotion chart data:', { labels, data, emotionCounts })
 
@@ -688,10 +741,10 @@ onMounted(() => {
   })
 })
 
-// Update charts when entries change
-watch(entries, () => {
+// Update charts when entries or time range changes
+watch([entries, timeRange], () => {
   nextTick(() => {
-    if (entries.value && entries.value.length > 0) {
+    if (entriesByTimeRange.value && entriesByTimeRange.value.length > 0) {
       initIntensityChart()
       initEmotionChart()
     }
