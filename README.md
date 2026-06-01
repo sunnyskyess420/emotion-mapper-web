@@ -25,10 +25,10 @@ A modern, privacy-focused emotion tracking web application. Track your emotional
 - **Visual Analytics** - Interactive charts showing intensity trends over time and emotion distribution
 - **Data Export** - Export your data as JSON or CSV for backup or analysis
 - **Edit & Delete** - Full CRUD operations for managing your entries
-- **Privacy First** - All data stored locally in your browser using IndexedDB
-- **Dark Theme** - Beautiful dark mode interface
+- **Privacy First** - All data stored locally in your browser using IndexedDB (100% offline, no cloud sync)
+- **Dark Theme** - Beautiful dark mode interface with gradient backgrounds and smooth animations
 - **Responsive Design** - Works seamlessly on desktop and mobile devices
-- **Toast Notifications** - Elegant feedback for user actions
+- **Toast Notifications** - Elegant feedback for user actions with backdrop blur effects
 
 ## � Getting Started
 
