@@ -676,20 +676,24 @@ function initEmotionChart() {
     })
   })
 
-  // Sort by frequency and take top 8
+  // Sort by frequency and take top 12
   const sortedEmotions = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])
-  const topEmotions = sortedEmotions.slice(0, 8)
-  const otherCount = sortedEmotions.slice(8).reduce((sum, [, count]) => sum + count, 0)
+  const topEmotions = sortedEmotions.slice(0, 12)
+  const otherEmotions = sortedEmotions.slice(12)
+  const otherCount = otherEmotions.reduce((sum, [, count]) => sum + count, 0)
   
   let labels = topEmotions.map(([emotion]) => emotion)
   let data = topEmotions.map(([, count]) => count)
+  
+  // Store other emotions data for tooltip
+  const otherEmotionsData = otherEmotions.map(([emotion, count]) => ({ emotion, count }))
   
   if (otherCount > 0) {
     labels.push('Other')
     data.push(otherCount)
   }
 
-  console.log('Emotion chart data:', { labels, data, emotionCounts })
+  console.log('Emotion chart data:', { labels, data, emotionCounts, otherEmotionsData })
 
   const colors = [
     'rgb(143, 170, 152)',  // sage
@@ -699,7 +703,12 @@ function initEmotionChart() {
     'rgb(150, 140, 160)',  // muted purple-gray
     'rgb(140, 165, 155)',  // muted teal
     'rgb(175, 155, 130)',  // muted gold
-    'rgb(160, 140, 145)'   // muted rose
+    'rgb(160, 140, 145)',  // muted rose
+    'rgb(145, 155, 165)',  // muted slate
+    'rgb(165, 145, 155)',  // muted mauve
+    'rgb(155, 165, 145)',  // muted olive
+    'rgb(135, 150, 160)',  // muted steel
+    'rgb(130, 130, 140)'   // muted gray (for Other)
   ]
 
   if (emotionChartInstance) {
@@ -724,6 +733,26 @@ function initEmotionChart() {
           labels: {
             color: 'rgb(148, 163, 184)',
             padding: 20
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || ''
+              const value = context.raw || 0
+              const total = context.dataset.data.reduce((a, b) => a + b, 0)
+              const percentage = ((value / total) * 100).toFixed(1)
+              
+              // If it's the "Other" slice, show detailed breakdown
+              if (label === 'Other' && otherEmotionsData.length > 0) {
+                let otherDetails = otherEmotionsData
+                  .map(({ emotion, count }) => `${emotion}: ${count}`)
+                  .join(', ')
+                return `Other (${value}, ${percentage}%): ${otherDetails}`
+              }
+              
+              return `${label}: ${value} (${percentage}%)`
+            }
           }
         }
       }
