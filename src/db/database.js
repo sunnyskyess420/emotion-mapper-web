@@ -1,10 +1,10 @@
 import Dexie from 'dexie'
-import { dexieCloud } from 'dexie-cloud-addon'
+import dexieCloud from 'dexie-cloud-addon'
 
 let db = null
 
 // Initialize database based on auth mode
-export function initDatabase(authMode = 'guest') {
+export async function initDatabase(authMode = 'guest') {
   // Close existing database if open
   if (db) {
     db.close()
@@ -18,10 +18,15 @@ export function initDatabase(authMode = 'guest') {
   if (authMode === 'signed-in') {
     const databaseUrl = import.meta.env.VITE_DEXIE_CLOUD_URL || 'https://your-app.dexie.cloud'
     console.log('Initializing Dexie Cloud with URL:', databaseUrl)
+    
+    // Open database first to ensure it's ready
+    await db.open()
+    
     db.use(dexieCloud, {
       databaseUrl: databaseUrl,
       requireAuth: true
     })
+    
     console.log('Dexie Cloud initialized, db.cloud:', db.cloud)
   }
 
