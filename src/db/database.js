@@ -16,10 +16,13 @@ export function initDatabase(authMode = 'guest') {
 
   // Add Dexie Cloud addon only for signed-in mode
   if (authMode === 'signed-in') {
+    const databaseUrl = import.meta.env.VITE_DEXIE_CLOUD_URL || 'https://your-app.dexie.cloud'
+    console.log('Initializing Dexie Cloud with URL:', databaseUrl)
     db.use(dexieCloud, {
-      databaseUrl: import.meta.env.VITE_DEXIE_CLOUD_URL || 'https://your-app.dexie.cloud',
+      databaseUrl: databaseUrl,
       requireAuth: true
     })
+    console.log('Dexie Cloud initialized, db.cloud:', db.cloud)
   }
 
   // Define database schema with upgrade handler
