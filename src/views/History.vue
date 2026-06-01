@@ -1,26 +1,26 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+  <div class="min-h-screen zen-background text-[#e7edf2]">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Emotion History</h1>
+      <h1 class="text-4xl zen-heading text-center mb-8 bg-gradient-to-r from-[#a996c2] to-[#8faa98] bg-clip-text text-transparent">Emotion History</h1>
       
       <!-- Statistics Section -->
       <div class="max-w-4xl mx-auto mb-8">
-        <div v-if="isLoading" class="bg-slate-800 rounded-lg p-6 text-center">
+        <div v-if="isLoading" class="zen-card p-6 text-center">
           <LoadingSpinner />
-          <p class="text-slate-400 mt-2">Loading entries...</p>
+          <p class="text-[#b9c3cc] mt-2">Loading entries...</p>
         </div>
         <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-slate-800 rounded-lg p-6">
-            <h3 class="text-lg font-semibold mb-2">Total Entries</h3>
-            <p class="text-3xl font-bold text-blue-400">{{ entries ? entries.length : 0 }}</p>
+          <div class="zen-card p-6">
+            <h3 class="text-lg zen-heading mb-2">Total Entries</h3>
+            <p class="text-3xl font-bold text-[#8faa98]">{{ entries ? entries.length : 0 }}</p>
           </div>
-          <div class="bg-slate-800 rounded-lg p-6">
-            <h3 class="text-lg font-semibold mb-2">Most Common Emotion</h3>
-            <p class="text-3xl font-bold text-green-400">{{ mostCommonEmotion }}</p>
+          <div class="zen-card p-6">
+            <h3 class="text-lg zen-heading mb-2">Most Common Emotion</h3>
+            <p class="text-3xl font-bold text-[#a996c2]">{{ mostCommonEmotion }}</p>
           </div>
-          <div class="bg-slate-800 rounded-lg p-6">
-            <h3 class="text-lg font-semibold mb-2">Average Intensity</h3>
-            <p class="text-3xl font-bold text-purple-400">{{ averageIntensity }}/10</p>
+          <div class="zen-card p-6">
+            <h3 class="text-lg zen-heading mb-2">Average Intensity</h3>
+            <p class="text-3xl font-bold text-[#7f99ad]">{{ averageIntensity }}/10</p>
           </div>
         </div>
       </div>
@@ -28,12 +28,12 @@
       <!-- Charts Section -->
       <div v-if="entries && entries.length > 0" class="max-w-4xl mx-auto mb-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-slate-800 rounded-lg p-6">
-            <h3 class="text-lg font-semibold mb-4">Intensity Trend</h3>
+          <div class="zen-card p-6">
+            <h3 class="text-lg zen-heading mb-4">Intensity Trend</h3>
             <canvas ref="intensityChart"></canvas>
           </div>
-          <div class="bg-slate-800 rounded-lg p-6">
-            <h3 class="text-lg font-semibold mb-4">Emotion Distribution</h3>
+          <div class="zen-card p-6">
+            <h3 class="text-lg zen-heading mb-4">Emotion Distribution</h3>
             <canvas ref="emotionChart"></canvas>
           </div>
         </div>
@@ -41,30 +41,30 @@
 
       <!-- Entries List -->
       <div class="max-w-4xl mx-auto">
-        <div class="bg-slate-800 rounded-lg p-6">
+        <div class="zen-card p-6">
           <div v-if="isLoading" class="text-center py-8">
             <LoadingSpinner />
-            <p class="text-slate-400 mt-2">Loading entries...</p>
+            <p class="text-[#b9c3cc] mt-2">Loading entries...</p>
           </div>
           <div v-else>
             <div class="flex justify-between items-center mb-4">
-              <h2 class="text-2xl font-semibold">All Entries</h2>
+              <h2 class="text-2xl zen-heading">All Entries</h2>
               <div v-if="entries && entries.length > 0" class="flex gap-2">
                 <button 
                   @click="triggerFileInput"
-                  class="bg-purple-600 hover:bg-purple-700 text-white text-sm px-3 py-1 rounded transition-colors"
+                  class="zen-button text-sm px-3 py-1"
                 >
                   Import JSON
                 </button>
                 <button 
                   @click="exportJSON"
-                  class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors"
+                  class="zen-button-primary text-sm px-3 py-1"
                 >
                   Export JSON
                 </button>
                 <button 
                   @click="exportCSV"
-                  class="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded transition-colors"
+                  class="zen-button text-sm px-3 py-1"
                 >
                   Export CSV
                 </button>
@@ -72,7 +72,7 @@
               <div v-else class="flex gap-2">
                 <button 
                   @click="triggerFileInput"
-                  class="bg-purple-600 hover:bg-purple-700 text-white text-sm px-3 py-1 rounded transition-colors"
+                  class="zen-button text-sm px-3 py-1"
                 >
                   Import JSON
                 </button>
@@ -87,7 +87,7 @@
             >
 
           <!-- Filters -->
-          <div v-if="entries && entries.length > 0" class="mb-4 p-4 bg-slate-700 rounded-lg">
+          <div v-if="entries && entries.length > 0" class="mb-4 p-4 bg-[#24303a] rounded-lg">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label class="block text-sm font-medium mb-2">Search</label>
@@ -95,14 +95,14 @@
                   v-model="searchQuery"
                   type="text"
                   placeholder="Search notes, emotions..."
-                  class="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white text-sm"
+                  class="w-full px-3 py-2 zen-input text-sm"
                 >
               </div>
               <div>
                 <label class="block text-sm font-medium mb-2">Emotion</label>
                 <select 
                   v-model="selectedEmotion"
-                  class="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white text-sm"
+                  class="w-full px-3 py-2 zen-select text-sm"
                 >
                   <option value="">All emotions</option>
                   <option v-for="emotion in uniqueEmotions" :key="emotion" :value="emotion">
@@ -114,7 +114,7 @@
                 <label class="block text-sm font-medium mb-2">Intensity</label>
                 <select 
                   v-model="selectedIntensity"
-                  class="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white text-sm"
+                  class="w-full px-3 py-2 zen-select text-sm"
                 >
                   <option value="">All intensities</option>
                   <option v-for="i in 10" :key="i" :value="i">{{ i }}/10</option>
@@ -124,14 +124,14 @@
             <div v-if="hasActiveFilters" class="mt-3">
               <button 
                 @click="clearFilters"
-                class="text-sm text-blue-400 hover:text-blue-300"
+                class="text-sm text-[#a996c2] hover:text-[#8faa98]"
               >
                 Clear filters
               </button>
             </div>
           </div>
           
-          <div v-if="!entries || entries.length === 0" class="text-slate-400 text-center py-8">
+          <div v-if="!entries || entries.length === 0" class="text-[#b9c3cc] text-center py-8">
             No entries yet. Start tracking your emotions!
           </div>
           
@@ -139,68 +139,68 @@
             <div 
               v-for="entry in filteredEntries" 
               :key="entry.id"
-              class="bg-slate-700 rounded-lg p-4"
+              class="bg-[#24303a] rounded-lg p-4"
             >
               <div class="flex justify-between items-start mb-2">
                 <div class="flex flex-wrap gap-2">
                   <span
                     v-for="emotion in getEmotions(entry)"
                     :key="emotion"
-                    class="bg-blue-600 px-3 py-1 rounded text-sm font-semibold"
+                    class="zen-tag px-3 py-1 text-sm font-semibold"
                   >
                     {{ emotion }}
                   </span>
                 </div>
-                <span class="bg-blue-600 px-3 py-1 rounded text-sm">
+                <span class="zen-tag px-3 py-1 text-sm">
                   Intensity: {{ entry.intensity }}/10
                 </span>
               </div>
-              <p class="text-slate-300 text-sm mb-2">{{ entry.note }}</p>
+              <p class="text-[#b9c3cc] text-sm mb-2">{{ entry.note }}</p>
               
               <!-- Additional Details -->
-              <div v-if="hasAdditionalDetails(entry)" class="mt-3 pt-3 border-t border-slate-600">
+              <div v-if="hasAdditionalDetails(entry)" class="mt-3 pt-3 border-t border-[#3a4652]">
                 <div class="grid grid-cols-2 gap-2 text-xs">
-                  <div v-if="getPhysicalSensations(entry).length > 0" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Sensations:</span>
+                  <div v-if="getPhysicalSensations(entry).length > 0" class="text-[#b9c3cc]">
+                    <span class="font-medium text-[#e7edf2]">Sensations:</span>
                     <div class="flex flex-wrap gap-1 mt-1">
                       <span
                         v-for="sensation in getPhysicalSensations(entry)"
                         :key="sensation"
-                        class="bg-purple-600 px-2 py-0.5 rounded text-xs"
+                        class="zen-tag px-2 py-0.5 text-xs"
                       >
                         {{ sensation }}
                       </span>
                     </div>
                   </div>
-                  <div v-if="entry.triggers" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Triggers:</span> {{ entry.triggers }}
+                  <div v-if="entry.triggers" class="text-[#b9c3cc]">
+                    <span class="font-medium text-[#e7edf2]">Triggers:</span> {{ entry.triggers }}
                   </div>
-                  <div v-if="entry.location" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Location:</span> {{ entry.location }}
+                  <div v-if="entry.location" class="text-[#b9c3cc]">
+                    <span class="font-medium text-[#e7edf2]">Location:</span> {{ entry.location }}
                   </div>
-                  <div v-if="entry.timeOfDay" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Time:</span> {{ entry.timeOfDay }}
+                  <div v-if="entry.timeOfDay" class="text-[#b9c3cc]">
+                    <span class="font-medium text-[#e7edf2]">Time:</span> {{ entry.timeOfDay }}
                   </div>
-                  <div v-if="entry.duration" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Duration:</span> {{ entry.duration }}
+                  <div v-if="entry.duration" class="text-[#b9c3cc]">
+                    <span class="font-medium text-[#e7edf2]">Duration:</span> {{ entry.duration }}
                   </div>
-                  <div v-if="entry.socialContext" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Context:</span> {{ entry.socialContext }}
+                  <div v-if="entry.socialContext" class="text-[#b9c3cc]">
+                    <span class="font-medium text-[#e7edf2]">Context:</span> {{ entry.socialContext }}
                   </div>
-                  <div v-if="entry.sleepQuality" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Sleep:</span> {{ entry.sleepQuality }}
+                  <div v-if="entry.sleepQuality" class="text-[#b9c3cc]">
+                    <span class="font-medium text-[#e7edf2]">Sleep:</span> {{ entry.sleepQuality }}
                   </div>
-                  <div v-if="entry.energyLevel" class="text-slate-400">
-                    <span class="font-medium text-slate-300">Energy:</span> {{ entry.energyLevel }}
+                  <div v-if="entry.energyLevel" class="text-[#b9c3cc]">
+                    <span class="font-medium text-[#e7edf2]">Energy:</span> {{ entry.energyLevel }}
                   </div>
                 </div>
-                <div v-if="getCopingStrategies(entry).length > 0" class="text-slate-400 text-xs mt-2">
-                  <span class="font-medium text-slate-300">Coping:</span>
+                <div v-if="getCopingStrategies(entry).length > 0" class="text-[#b9c3cc] text-xs mt-2">
+                  <span class="font-medium text-[#e7edf2]">Coping:</span>
                   <div class="flex flex-wrap gap-1 mt-1">
                     <span
                       v-for="strategy in getCopingStrategies(entry)"
                       :key="strategy"
-                      class="bg-green-600 px-2 py-0.5 rounded text-xs"
+                      class="zen-tag px-2 py-0.5 text-xs"
                     >
                       {{ strategy }}
                     </span>
@@ -208,19 +208,19 @@
                 </div>
               </div>
               
-              <p class="text-slate-500 text-xs mb-3 mt-3">
+              <p class="text-[#6b7a85] text-xs mb-3 mt-3">
                 {{ formatDate(entry.createdAt) }}
               </p>
               <div class="flex gap-2">
                 <button 
                   @click="editEntry(entry)"
-                  class="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded transition-colors"
+                  class="zen-button text-sm px-3 py-1"
                 >
                   Edit
                 </button>
                 <button 
                   @click="deleteEntry(entry.id)"
-                  class="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded transition-colors"
+                  class="zen-button-danger text-sm px-3 py-1"
                 >
                   Delete
                 </button>

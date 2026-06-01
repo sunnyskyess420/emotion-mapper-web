@@ -4,12 +4,12 @@
       v-if="show"
       :class="[
         'fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 max-w-sm',
-        type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+        type === 'success' ? 'bg-[#1d242b] border border-[#8faa98]/30' : 'bg-[#1d242b] border border-red-500/30'
       ]"
     >
       <div class="flex items-center gap-3">
         <span class="text-xl">{{ type === 'success' ? '✓' : '✕' }}</span>
-        <span class="font-medium">{{ message }}</span>
+        <span class="font-medium text-[#e7edf2]">{{ message }}</span>
       </div>
     </div>
   </transition>
@@ -69,7 +69,7 @@ watch(() => props.message, (newMessage) => {
 }
 
 .fixed.bottom-4.right-4 {
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
 }
 </style>

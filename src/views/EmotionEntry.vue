@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+  <div class="min-h-screen zen-background text-[#e7edf2]">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Emotion Entry</h1>
+      <h1 class="text-4xl zen-heading text-center mb-8 bg-gradient-to-r from-[#a996c2] to-[#8faa98] bg-clip-text text-transparent">Emotion Entry</h1>
       
       <!-- Form Section -->
-      <div class="max-w-2xl mx-auto bg-slate-800 rounded-lg p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4">{{ isEditing ? 'Edit Entry' : 'Add New Entry' }}</h2>
+      <div class="max-w-2xl mx-auto zen-card p-6 mb-8">
+        <h2 class="text-2xl zen-heading mb-4">{{ isEditing ? 'Edit Entry' : 'Add New Entry' }}</h2>
         
         <!-- Emotion Name -->
         <div class="mb-4">
@@ -34,7 +34,7 @@
             v-model="form.note"
             placeholder="What happened? How do you feel?"
             rows="3"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white resize-none"
+            class="w-full px-4 py-2 zen-input resize-none"
           ></textarea>
         </div>
 
@@ -51,14 +51,14 @@
             v-model="form.triggers"
             type="text"
             placeholder="What caused this emotion?"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            class="w-full px-4 py-2 zen-input"
           >
           <div v-if="savedTriggers.length > 0" class="flex flex-wrap gap-2 mt-2">
             <span
               v-for="trigger in savedTriggers"
               :key="trigger.id"
               @click="form.triggers = trigger.value"
-              class="bg-slate-600 hover:bg-slate-500 px-3 py-1 rounded text-sm cursor-pointer flex items-center gap-1"
+              class="zen-tag px-3 py-1 cursor-pointer flex items-center gap-1"
             >
               {{ trigger.value }}
               <button
@@ -78,14 +78,14 @@
             v-model="form.location"
             type="text"
             placeholder="Where are you?"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            class="w-full px-4 py-2 zen-input"
           >
           <div v-if="savedLocations.length > 0" class="flex flex-wrap gap-2 mt-2">
             <span
               v-for="location in savedLocations"
               :key="location.id"
               @click="form.location = location.value"
-              class="bg-slate-600 hover:bg-slate-500 px-3 py-1 rounded text-sm cursor-pointer flex items-center gap-1"
+              class="zen-tag px-3 py-1 cursor-pointer flex items-center gap-1"
             >
               {{ location.value }}
               <button
@@ -103,7 +103,7 @@
           <label class="block text-sm font-medium mb-2">Time of Day</label>
           <select 
             v-model="form.timeOfDay"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            class="w-full px-4 py-2 zen-select"
           >
             <option value="">Select time...</option>
             <option value="Morning">Morning</option>
@@ -124,7 +124,7 @@
           <label class="block text-sm font-medium mb-2">Duration</label>
           <select 
             v-model="form.duration"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            class="w-full px-4 py-2 zen-select"
           >
             <option value="">Select duration...</option>
             <option value="Minutes">Minutes</option>
@@ -139,7 +139,7 @@
           <label class="block text-sm font-medium mb-2">Social Context</label>
           <select 
             v-model="form.socialContext"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            class="w-full px-4 py-2 zen-select"
           >
             <option value="">Select context...</option>
             <option value="Alone">Alone</option>
@@ -156,7 +156,7 @@
           <label class="block text-sm font-medium mb-2">Sleep Quality Last Night</label>
           <select 
             v-model="form.sleepQuality"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            class="w-full px-4 py-2 zen-select"
           >
             <option value="">Select quality...</option>
             <option value="Very Poor">Very Poor</option>
@@ -172,7 +172,7 @@
           <label class="block text-sm font-medium mb-2">Energy Level</label>
           <select 
             v-model="form.energyLevel"
-            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            class="w-full px-4 py-2 zen-select"
           >
             <option value="">Select level...</option>
             <option value="Very Low">Very Low</option>
@@ -187,14 +187,14 @@
         <div class="flex gap-2">
           <button 
             @click="saveEntry"
-            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            class="flex-1 zen-button-primary font-semibold py-2 px-4"
           >
             {{ isEditing ? 'Update Entry' : 'Save Entry' }}
           </button>
           <button 
             v-if="isEditing"
             @click="cancelEdit"
-            class="flex-1 bg-slate-600 hover:bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            class="flex-1 zen-button font-semibold py-2 px-4"
           >
             Cancel
           </button>
@@ -202,10 +202,10 @@
       </div>
       
       <!-- Saved Entries List -->
-      <div class="max-w-2xl mx-auto bg-slate-800 rounded-lg p-6">
-        <h2 class="text-2xl font-semibold mb-4">Saved Entries ({{ entries.length }})</h2>
+      <div class="max-w-2xl mx-auto zen-card p-6">
+        <h2 class="text-2xl zen-heading mb-4">Saved Entries ({{ entries.length }})</h2>
         
-        <div v-if="entries.length === 0" class="text-slate-400 text-center py-4">
+        <div v-if="entries.length === 0" class="text-[#b9c3cc] text-center py-4">
           No entries yet. Add your first emotion above!
         </div>
         
@@ -213,24 +213,24 @@
           <div 
             v-for="entry in entries" 
             :key="entry.id"
-            class="bg-slate-700 rounded-lg p-4"
+            class="bg-[#24303a] rounded-lg p-4"
           >
             <div class="flex justify-between items-start mb-2">
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="emotion in getEmotions(entry)"
                   :key="emotion"
-                  class="bg-blue-600 px-3 py-1 rounded text-sm font-semibold"
+                  class="zen-tag px-3 py-1 text-sm font-semibold"
                 >
                   {{ emotion }}
                 </span>
               </div>
-              <span class="bg-blue-600 px-2 py-1 rounded text-sm">
+              <span class="zen-tag px-2 py-1 text-sm">
                 Intensity: {{ entry.intensity }}/10
               </span>
             </div>
-            <p class="text-slate-300 text-sm mb-2">{{ entry.note }}</p>
-            <p class="text-slate-500 text-xs">
+            <p class="text-[#b9c3cc] text-sm mb-2">{{ entry.note }}</p>
+            <p class="text-[#6b7a85] text-xs">
               {{ formatDate(entry.createdAt) }}
             </p>
           </div>
