@@ -19,9 +19,6 @@ export async function initDatabase(authMode = 'guest') {
     const databaseUrl = import.meta.env.VITE_DEXIE_CLOUD_URL || 'https://your-app.dexie.cloud'
     console.log('Initializing Dexie Cloud with URL:', databaseUrl)
     
-    // Open database first to ensure it's ready
-    await db.open()
-    
     db.use(dexieCloud, {
       databaseUrl: databaseUrl,
       requireAuth: true
