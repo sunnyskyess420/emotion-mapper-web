@@ -639,14 +639,14 @@ function initEmotionChart() {
   console.log('Emotion chart data:', { labels, data, emotionCounts })
 
   const colors = [
-    'rgb(59, 130, 246)',
-    'rgb(34, 197, 94)',
-    'rgb(168, 85, 247)',
-    'rgb(249, 115, 22)',
-    'rgb(236, 72, 153)',
-    'rgb(20, 184, 166)',
-    'rgb(234, 179, 8)',
-    'rgb(239, 68, 68)'
+    'rgb(143, 170, 152)',  // sage
+    'rgb(169, 150, 194)',  // muted lavender
+    'rgb(127, 153, 173)',  // mist blue
+    'rgb(180, 160, 140)',  // muted tan
+    'rgb(150, 140, 160)',  // muted purple-gray
+    'rgb(140, 165, 155)',  // muted teal
+    'rgb(175, 155, 130)',  // muted gold
+    'rgb(160, 140, 145)'   // muted rose
   ]
 
   if (emotionChartInstance) {
