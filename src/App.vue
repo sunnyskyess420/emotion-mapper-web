@@ -60,41 +60,65 @@ window.showToast = (message, type = 'success') => {
 }
 
 .zen-navbar {
-  background: rgba(31, 40, 49, 0.72);
+  background: rgba(31, 40, 49, 0.85);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  .zen-navbar {
+    background: #1f2831;
+  }
 }
 
 .nav-link {
   color: #b9c3cc;
   transition: color 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
 }
 
 .nav-link:hover {
   color: #a996c2;
+  background: rgba(169, 150, 194, 0.1);
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid #a996c2;
+  outline-offset: 2px;
+  background: rgba(169, 150, 194, 0.15);
 }
 
 /* Zen Card Style */
 .zen-card {
-  background: rgba(31, 40, 49, 0.72);
+  background: rgba(31, 40, 49, 0.85);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
   border-radius: 18px;
 }
 
+@supports not (backdrop-filter: blur(12px)) {
+  .zen-card {
+    background: #1f2831;
+  }
+}
+
 /* Zen Button Style */
 .zen-button {
-  background: rgba(143, 170, 152, 0.2);
-  border: 1px solid rgba(143, 170, 152, 0.3);
+  background: rgba(143, 170, 152, 0.25);
+  border: 1px solid rgba(143, 170, 152, 0.4);
   color: #e7edf2;
   transition: all 0.2s ease;
   border-radius: 12px;
+  padding: 0.5rem 1rem;
 }
 
 .zen-button:hover {
-  background: rgba(143, 170, 152, 0.3);
-  border-color: rgba(143, 170, 152, 0.5);
+  background: rgba(143, 170, 152, 0.35);
+  border-color: rgba(143, 170, 152, 0.6);
   transform: translateY(-1px);
 }
 
@@ -102,63 +126,111 @@ window.showToast = (message, type = 'success') => {
   transform: translateY(0);
 }
 
+.zen-button:focus-visible {
+  outline: 2px solid #8faa98;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(143, 170, 152, 0.2);
+}
+
+.zen-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .zen-button-primary {
-  background: rgba(169, 150, 194, 0.25);
-  border: 1px solid rgba(169, 150, 194, 0.4);
+  background: rgba(169, 150, 194, 0.3);
+  border: 1px solid rgba(169, 150, 194, 0.5);
 }
 
 .zen-button-primary:hover {
-  background: rgba(169, 150, 194, 0.35);
-  border-color: rgba(169, 150, 194, 0.6);
+  background: rgba(169, 150, 194, 0.4);
+  border-color: rgba(169, 150, 194, 0.7);
+}
+
+.zen-button-primary:focus-visible {
+  outline: 2px solid #a996c2;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(169, 150, 194, 0.2);
 }
 
 .zen-button-danger {
-  background: rgba(239, 68, 68, 0.2);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.25);
+  border: 1px solid rgba(239, 68, 68, 0.4);
 }
 
 .zen-button-danger:hover {
-  background: rgba(239, 68, 68, 0.3);
-  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.35);
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+.zen-button-danger:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
 }
 
 /* Zen Input Style */
 .zen-input {
-  background: rgba(24, 30, 36, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(24, 30, 36, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #e7edf2;
   border-radius: 12px;
   transition: all 0.2s ease;
+  padding: 0.5rem 0.75rem;
 }
 
 .zen-input:focus {
   outline: none;
-  border-color: rgba(169, 150, 194, 0.4);
-  box-shadow: 0 0 0 3px rgba(169, 150, 194, 0.1);
+  border-color: rgba(169, 150, 194, 0.5);
+  box-shadow: 0 0 0 3px rgba(169, 150, 194, 0.15);
+}
+
+.zen-input:focus-visible {
+  outline: 2px solid #a996c2;
+  outline-offset: -2px;
+  border-color: rgba(169, 150, 194, 0.6);
 }
 
 .zen-input::placeholder {
-  color: #6b7a85;
+  color: #8b9ba5;
+}
+
+.zen-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Zen Select Style */
 .zen-select {
-  background: rgba(24, 30, 36, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(24, 30, 36, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #e7edf2;
   border-radius: 12px;
   transition: all 0.2s ease;
+  padding: 0.5rem 0.75rem;
 }
 
 .zen-select:focus {
   outline: none;
-  border-color: rgba(169, 150, 194, 0.4);
-  box-shadow: 0 0 0 3px rgba(169, 150, 194, 0.1);
+  border-color: rgba(169, 150, 194, 0.5);
+  box-shadow: 0 0 0 3px rgba(169, 150, 194, 0.15);
+}
+
+.zen-select:focus-visible {
+  outline: 2px solid #a996c2;
+  outline-offset: -2px;
+  border-color: rgba(169, 150, 194, 0.6);
 }
 
 .zen-select option {
   background: #1d242b;
   color: #e7edf2;
+}
+
+.zen-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Zen Text Styles */
@@ -174,10 +246,11 @@ window.showToast = (message, type = 'success') => {
 
 /* Zen Tag/Chip Style */
 .zen-tag {
-  background: rgba(127, 153, 173, 0.2);
-  border: 1px solid rgba(127, 153, 173, 0.3);
+  background: rgba(127, 153, 173, 0.25);
+  border: 1px solid rgba(127, 153, 173, 0.4);
   color: #e7edf2;
   border-radius: 8px;
+  padding: 0.25rem 0.75rem;
 }
 
 /* Page transitions */
