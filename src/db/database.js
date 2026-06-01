@@ -1,4 +1,5 @@
 import Dexie from 'dexie'
+import dexieCloud from 'dexie-cloud-addon'
 
 let db = null
 
@@ -18,16 +19,12 @@ export async function initDatabase(authMode = 'guest') {
     const databaseUrl = import.meta.env.VITE_DEXIE_CLOUD_URL || 'https://your-app.dexie.cloud'
     console.log('Initializing Dexie Cloud with URL:', databaseUrl)
     
-    // Use global dexieCloud from CDN
-    if (typeof window.dexieCloud !== 'undefined') {
-      db.use(window.dexieCloud, {
-        databaseUrl: databaseUrl,
-        requireAuth: true
-      })
-      console.log('Dexie Cloud initialized, db.cloud:', db.cloud)
-    } else {
-      console.error('dexieCloud not available from CDN')
-    }
+    db.use(dexieCloud, {
+      databaseUrl: databaseUrl,
+      requireAuth: true
+    })
+    
+    console.log('Dexie Cloud initialized, db.cloud:', db.cloud)
   }
 
   // Define database schema with upgrade handler
