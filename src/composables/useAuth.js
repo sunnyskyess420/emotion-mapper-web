@@ -19,7 +19,11 @@ export function useAuth() {
     if (savedMode === 'signed-in') {
       try {
         const db = initDatabase('signed-in')
-        const currentUser = db.cloud.currentUser
+        
+        // Wait a moment for Dexie Cloud addon to initialize
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        const currentUser = db.cloud?.currentUser
         
         if (currentUser) {
           // Dexie Cloud session is valid - restore from localStorage
@@ -82,6 +86,14 @@ export function useAuth() {
       // Initialize database for signed-in mode
       const db = initDatabase('signed-in')
       
+      // Wait a moment for Dexie Cloud addon to initialize
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
+      // Check if cloud is available
+      if (!db.cloud) {
+        throw new Error('Dexie Cloud not initialized. Check configuration.')
+      }
+      
       // Sign in with Dexie Cloud Google OAuth
       await db.cloud.login({ provider: 'google' })
       
@@ -114,7 +126,13 @@ export function useAuth() {
       // Sign out from Dexie Cloud if signed in
       if (authMode.value === 'signed-in') {
         const db = initDatabase('signed-in')
-        await db.cloud.logout()
+        
+        // Wait a moment for Dexie Cloud addon to initialize
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        if (db.cloud) {
+          await db.cloud.logout()
+        }
       }
       
       // Set guest mode
