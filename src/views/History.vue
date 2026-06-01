@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-slate-900 text-white">
+  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl font-bold text-center mb-8">Emotion History</h1>
+      <h1 class="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Emotion History</h1>
       
       <!-- Statistics Section -->
       <div class="max-w-4xl mx-auto mb-8">
         <div v-if="isLoading" class="bg-slate-800 rounded-lg p-6 text-center">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto"></div>
+          <LoadingSpinner />
           <p class="text-slate-400 mt-2">Loading entries...</p>
         </div>
         <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -43,7 +43,7 @@
       <div class="max-w-4xl mx-auto">
         <div class="bg-slate-800 rounded-lg p-6">
           <div v-if="isLoading" class="text-center py-8">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto"></div>
+            <LoadingSpinner />
             <p class="text-slate-400 mt-2">Loading entries...</p>
           </div>
           <div v-else>
@@ -240,6 +240,7 @@ import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useEntriesStore } from '../stores/entries'
 import Chart from 'chart.js/auto'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
 
 const router = useRouter()
 const entriesStore = useEntriesStore()

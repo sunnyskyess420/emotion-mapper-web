@@ -58,4 +58,36 @@ window.showToast = (message, type = 'success') => {
 .fade-leave-to {
   opacity: 0;
 }
+
+/* Navigation hover effects */
+a {
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: #60a5fa;
+}
+
+/* Button hover effects */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.02);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Card hover effects */
+.bg-slate-800 {
+  transition: all 0.2s ease;
+}
+
+.bg-slate-800:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
 </style>

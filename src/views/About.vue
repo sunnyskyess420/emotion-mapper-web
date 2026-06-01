@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-slate-900 text-white">
+  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl font-bold text-center mb-8">About Emotion Mapper</h1>
+      <h1 class="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">About Emotion Mapper</h1>
       <div class="max-w-2xl mx-auto bg-slate-800 rounded-lg p-6">
         <h2 class="text-2xl font-semibold mb-4">Privacy-First Emotional Tracking</h2>
         <p class="text-slate-300 mb-4">
