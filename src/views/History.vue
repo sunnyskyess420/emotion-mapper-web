@@ -793,12 +793,13 @@ function initEmotionChart() {
               const total = context.dataset.data.reduce((a, b) => a + b, 0)
               const percentage = ((value / total) * 100).toFixed(1)
               
-              // If it's the "Other" slice, show detailed breakdown
+              // If it's the "Other" slice, show detailed breakdown with wrapping
               if (label === 'Other' && otherEmotionsData.length > 0) {
-                let otherDetails = otherEmotionsData
-                  .map(({ emotion, count }) => `${emotion}: ${count}`)
-                  .join(', ')
-                return `Other (${value}, ${percentage}%): ${otherDetails}`
+                const result = [`Other (${value}, ${percentage}%)`]
+                otherEmotionsData.forEach(({ emotion, count }) => {
+                  result.push(`  ${emotion}: ${count}`)
+                })
+                return result
               }
               
               return `${label}: ${value} (${percentage}%)`
@@ -814,6 +815,14 @@ function initEmotionChart() {
 onMounted(() => {
   nextTick(() => {
     if (entries.value && entries.value.length > 0) {
+      initIntensityChart()
+      initEmotionChart()
+    }
+  })
+  
+  // Handle window resize to redraw charts
+  window.addEventListener('resize', () => {
+    if (entriesByTimeRange.value && entriesByTimeRange.value.length > 0) {
       initIntensityChart()
       initEmotionChart()
     }
