@@ -50,15 +50,15 @@
         </div>
         <div class="grid grid-cols-1 gap-4">
           <div class="zen-card p-6">
-            <h3 class="text-lg zen-heading mb-4">Intensity Trend</h3>
-            <div class="relative" style="min-height: 250px;">
-              <canvas ref="intensityChart"></canvas>
-            </div>
-          </div>
-          <div class="zen-card p-6">
             <h3 class="text-lg zen-heading mb-4">Emotion Distribution</h3>
             <div class="relative" style="min-height: 300px;">
               <canvas ref="emotionChart"></canvas>
+            </div>
+          </div>
+          <div class="zen-card p-6">
+            <h3 class="text-lg zen-heading mb-4">Intensity Trend</h3>
+            <div class="relative" style="min-height: 250px;">
+              <canvas ref="intensityChart"></canvas>
             </div>
           </div>
         </div>
