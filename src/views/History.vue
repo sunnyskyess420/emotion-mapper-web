@@ -786,6 +786,76 @@ function initEmotionChart() {
           }
         },
         tooltip: {
+          bodyFont: {
+            size: 12
+          },
+          padding: 12,
+          displayColors: false,
+          external: function(context) {
+            // Tooltip Element
+            let tooltipEl = document.getElementById('chartjs-tooltip')
+
+            if (!tooltipEl) {
+              tooltipEl = document.createElement('div')
+              tooltipEl.id = 'chartjs-tooltip'
+              tooltipEl.innerHTML = '<table></table>'
+              document.body.appendChild(tooltipEl)
+            }
+
+            // Hide if no tooltip
+            const tooltipModel = context.tooltip
+            if (tooltipModel.opacity === 0) {
+              tooltipEl.style.opacity = 0
+              return
+            }
+
+            // Set Text
+            if (tooltipModel.body) {
+              const titleLines = tooltipModel.title || []
+              const bodyLines = tooltipModel.body.map(b => b.lines)
+
+              let innerHtml = '<thead>'
+
+              titleLines.forEach(function(title) {
+                innerHtml += '<tr><th style="text-align: left; padding: 4px 8px; background: #1f2831; color: #e7edf2; font-size: 12px;">' + title + '</th></tr>'
+              })
+              innerHtml += '</thead><tbody>'
+
+              bodyLines.forEach(function(body, i) {
+                const colors = tooltipModel.labelColors[i]
+                let style = 'background: ' + colors.backgroundColor + ';'
+                style += 'border-color: ' + colors.borderColor + ';'
+                style += 'border-width: 2px;'
+                const span = '<span style="' + style + '"></span>'
+
+                innerHtml += '<tr><td style="text-align: left; padding: 4px 8px; color: #e7edf2; font-size: 12px; white-space: pre-wrap;">' + body + '</td></tr>'
+              })
+
+              innerHtml += '</tbody>'
+
+              const tableRoot = tooltipEl.querySelector('table')
+              tableRoot.innerHTML = innerHtml
+            }
+
+            const position = context.chart.canvas.getBoundingClientRect()
+
+            // Display, position, and set styles for font
+            tooltipEl.style.opacity = 1
+            tooltipEl.style.position = 'absolute'
+            tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px'
+            tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px'
+            tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily
+            tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px'
+            tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle
+            tooltipEl.style.padding = tooltipModel.padding + 'px ' + tooltipModel.padding + 'px'
+            tooltipEl.style.pointerEvents = 'none'
+            tooltipEl.style.backgroundColor = 'rgba(31, 40, 49, 0.95)'
+            tooltipEl.style.borderRadius = '8px'
+            tooltipEl.style.border = '1px solid rgba(255, 255, 255, 0.12)'
+            tooltipEl.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)'
+            tooltipEl.style.maxWidth = '300px'
+            tooltipEl.style.zIndex = '1000'
+          },
           callbacks: {
             label: function(context) {
               const label = context.label || ''
