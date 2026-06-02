@@ -13,9 +13,6 @@
             <router-link to="/history" class="nav-link font-semibold transition-colors duration-200">
               🎭 History
             </router-link>
-            <router-link to="/about" class="nav-link font-semibold transition-colors duration-200">
-              🎭 About
-            </router-link>
           </div>
           <div class="flex items-center gap-4">
             <span class="text-[#b9c3cc] text-sm">Local Mode</span>
