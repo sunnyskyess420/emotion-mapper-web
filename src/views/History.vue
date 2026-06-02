@@ -920,10 +920,8 @@ function initEmotionChart() {
 // Initialize charts on mount
 onMounted(() => {
   nextTick(() => {
-    if (entries.value && entries.value.length > 0) {
-      initIntensityChart()
-      initEmotionChart()
-    }
+    initIntensityChart()
+    initEmotionChart()
   })
   
   // Handle window resize to trigger chart resize
