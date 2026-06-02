@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen zen-background text-[#e7edf2]">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl zen-heading text-center mb-8 text-[#b9c3cc]">Emotion Entry</h1>
+      <h1 class="text-4xl zen-heading text-center mb-8 text-[#8b9ba5]">Emotion Entry</h1>
       
       <!-- Form Section -->
       <div class="max-w-2xl mx-auto zen-card p-6 mb-8">

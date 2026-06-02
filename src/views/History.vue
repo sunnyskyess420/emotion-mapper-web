@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen zen-background text-[#e7edf2]">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl zen-heading text-center mb-8 text-[#b9c3cc]">Emotion History</h1>
+      <h1 class="text-4xl zen-heading text-center mb-8 text-[#8b9ba5]">Emotion History</h1>
       
       <!-- Statistics Section -->
       <div class="max-w-4xl mx-auto mb-8">
