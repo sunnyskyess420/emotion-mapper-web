@@ -563,17 +563,22 @@ function formatDate(dateString) {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #8faa98;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  transition: left 0.15s ease, background 0.15s ease;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 0 12px currentColor;
+  transition: left 0.15s ease, box-shadow 0.15s ease;
   transform: translateX(-50%) translateY(-50%);
   z-index: 10;
-  cursor: pointer;
+  cursor: grab;
   top: 50%;
+}
+
+.intensity-thumb:active {
+  cursor: grabbing;
 }
 
 .intensity-thumb:hover {
   transform: translateX(-50%) translateY(-50%) scale(1.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4), inset 0 0 16px currentColor;
 }
 </style>
