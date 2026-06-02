@@ -160,91 +160,120 @@
             <div 
               v-for="entry in filteredEntries" 
               :key="entry.id"
-              class="bg-[#24303a] rounded-lg p-4"
+              class="bg-[#24303a] rounded-lg overflow-hidden"
             >
-              <div class="flex justify-between items-start mb-2">
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    v-for="emotion in getEmotions(entry)"
-                    :key="emotion"
-                    class="zen-tag px-3 py-1 text-sm font-semibold"
-                  >
-                    {{ emotion }}
+              <!-- Summary Section (Always Visible) -->
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <div class="flex flex-wrap gap-2">
+                    <span
+                      v-for="emotion in getEmotions(entry)"
+                      :key="emotion"
+                      class="zen-tag px-3 py-1 text-sm font-semibold"
+                    >
+                      {{ emotion }}
+                    </span>
+                  </div>
+                  <span class="zen-tag px-3 py-1 text-sm">
+                    Intensity: {{ entry.intensity }}/10
                   </span>
                 </div>
-                <span class="zen-tag px-3 py-1 text-sm">
-                  Intensity: {{ entry.intensity }}/10
-                </span>
+                <p class="text-[#b9c3cc] text-sm mb-2">{{ entry.note }}</p>
+                <div class="flex justify-between items-center">
+                  <p class="text-[#6b7a85] text-xs">
+                    {{ formatDate(entry.createdAt) }}
+                  </p>
+                  <button
+                    v-if="hasAdditionalDetails(entry)"
+                    @click="toggleEntry(entry.id)"
+                    class="flex items-center gap-1 text-sm text-[#a996c2] hover:text-[#8faa98] transition-colors focus:outline-none focus:ring-2 focus:ring-[#8faa98] focus:ring-offset-2 focus:ring-offset-[#24303a] rounded px-2 py-1"
+                    :aria-expanded="isEntryExpanded(entry.id)"
+                    :aria-controls="`details-${entry.id}`"
+                  >
+                    <span>{{ isEntryExpanded(entry.id) ? 'Hide details' : 'Show details' }}</span>
+                    <svg
+                      class="w-4 h-4 transition-transform duration-200"
+                      :class="{ 'rotate-180': isEntryExpanded(entry.id) }"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <p class="text-[#b9c3cc] text-sm mb-2">{{ entry.note }}</p>
-              
-              <!-- Additional Details -->
-              <div v-if="hasAdditionalDetails(entry)" class="mt-3 pt-3 border-t border-[#3a4652]">
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                  <div v-if="getPhysicalSensations(entry).length > 0" class="text-[#b9c3cc]">
-                    <span class="font-medium text-[#e7edf2]">Sensations:</span>
+
+              <!-- Collapsible Details Section -->
+              <div
+                v-if="hasAdditionalDetails(entry)"
+                :id="`details-${entry.id}`"
+                class="overflow-hidden transition-all duration-300 ease-in-out"
+                :class="isEntryExpanded(entry.id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'"
+              >
+                <div class="px-4 pb-4 pt-0 border-t border-[#3a4652] mt-0">
+                  <div class="grid grid-cols-2 gap-2 text-xs pt-3">
+                    <div v-if="getPhysicalSensations(entry).length > 0" class="text-[#b9c3cc]">
+                      <span class="font-medium text-[#e7edf2]">Sensations:</span>
+                      <div class="flex flex-wrap gap-1 mt-1">
+                        <span
+                          v-for="sensation in getPhysicalSensations(entry)"
+                          :key="sensation"
+                          class="zen-tag px-2 py-0.5 text-xs"
+                        >
+                          {{ sensation }}
+                        </span>
+                      </div>
+                    </div>
+                    <div v-if="entry.triggers" class="text-[#b9c3cc]">
+                      <span class="font-medium text-[#e7edf2]">Triggers:</span> {{ entry.triggers }}
+                    </div>
+                    <div v-if="entry.location" class="text-[#b9c3cc]">
+                      <span class="font-medium text-[#e7edf2]">Location:</span> {{ entry.location }}
+                    </div>
+                    <div v-if="entry.timeOfDay" class="text-[#b9c3cc]">
+                      <span class="font-medium text-[#e7edf2]">Time:</span> {{ entry.timeOfDay }}
+                    </div>
+                    <div v-if="entry.duration" class="text-[#b9c3cc]">
+                      <span class="font-medium text-[#e7edf2]">Duration:</span> {{ entry.duration }}
+                    </div>
+                    <div v-if="entry.socialContext" class="text-[#b9c3cc]">
+                      <span class="font-medium text-[#e7edf2]">Context:</span> {{ entry.socialContext }}
+                    </div>
+                    <div v-if="entry.sleepQuality" class="text-[#b9c3cc]">
+                      <span class="font-medium text-[#e7edf2]">Sleep:</span> {{ entry.sleepQuality }}
+                    </div>
+                    <div v-if="entry.energyLevel" class="text-[#b9c3cc]">
+                      <span class="font-medium text-[#e7edf2]">Energy:</span> {{ entry.energyLevel }}
+                    </div>
+                  </div>
+                  <div v-if="getCopingStrategies(entry).length > 0" class="text-[#b9c3cc] text-xs mt-2">
+                    <span class="font-medium text-[#e7edf2]">Coping:</span>
                     <div class="flex flex-wrap gap-1 mt-1">
                       <span
-                        v-for="sensation in getPhysicalSensations(entry)"
-                        :key="sensation"
+                        v-for="strategy in getCopingStrategies(entry)"
+                        :key="strategy"
                         class="zen-tag px-2 py-0.5 text-xs"
                       >
-                        {{ sensation }}
+                        {{ strategy }}
                       </span>
                     </div>
                   </div>
-                  <div v-if="entry.triggers" class="text-[#b9c3cc]">
-                    <span class="font-medium text-[#e7edf2]">Triggers:</span> {{ entry.triggers }}
-                  </div>
-                  <div v-if="entry.location" class="text-[#b9c3cc]">
-                    <span class="font-medium text-[#e7edf2]">Location:</span> {{ entry.location }}
-                  </div>
-                  <div v-if="entry.timeOfDay" class="text-[#b9c3cc]">
-                    <span class="font-medium text-[#e7edf2]">Time:</span> {{ entry.timeOfDay }}
-                  </div>
-                  <div v-if="entry.duration" class="text-[#b9c3cc]">
-                    <span class="font-medium text-[#e7edf2]">Duration:</span> {{ entry.duration }}
-                  </div>
-                  <div v-if="entry.socialContext" class="text-[#b9c3cc]">
-                    <span class="font-medium text-[#e7edf2]">Context:</span> {{ entry.socialContext }}
-                  </div>
-                  <div v-if="entry.sleepQuality" class="text-[#b9c3cc]">
-                    <span class="font-medium text-[#e7edf2]">Sleep:</span> {{ entry.sleepQuality }}
-                  </div>
-                  <div v-if="entry.energyLevel" class="text-[#b9c3cc]">
-                    <span class="font-medium text-[#e7edf2]">Energy:</span> {{ entry.energyLevel }}
-                  </div>
-                </div>
-                <div v-if="getCopingStrategies(entry).length > 0" class="text-[#b9c3cc] text-xs mt-2">
-                  <span class="font-medium text-[#e7edf2]">Coping:</span>
-                  <div class="flex flex-wrap gap-1 mt-1">
-                    <span
-                      v-for="strategy in getCopingStrategies(entry)"
-                      :key="strategy"
-                      class="zen-tag px-2 py-0.5 text-xs"
+                  <div class="flex gap-2 mt-3">
+                    <button 
+                      @click="editEntry(entry)"
+                      class="zen-button text-sm px-3 py-1"
                     >
-                      {{ strategy }}
-                    </span>
+                      Edit
+                    </button>
+                    <button 
+                      @click="deleteEntry(entry.id)"
+                      class="zen-button-danger text-sm px-3 py-1"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
-              </div>
-              
-              <p class="text-[#6b7a85] text-xs mb-3 mt-3">
-                {{ formatDate(entry.createdAt) }}
-              </p>
-              <div class="flex gap-2">
-                <button 
-                  @click="editEntry(entry)"
-                  class="zen-button text-sm px-3 py-1"
-                >
-                  Edit
-                </button>
-                <button 
-                  @click="deleteEntry(entry.id)"
-                  class="zen-button-danger text-sm px-3 py-1"
-                >
-                  Delete
-                </button>
               </div>
             </div>
           </div>
@@ -281,6 +310,9 @@ const selectedEmotion = ref('')
 const selectedIntensity = ref('')
 const timeRange = ref('30') // 30, 90, 180, or 'all' days
 const fileInput = ref(null)
+
+// Expanded state for entry cards
+const expandedEntries = ref(new Set())
 
 // Get emotions from entry (handles both old string format and new array format)
 function getEmotions(entry) {
@@ -481,6 +513,22 @@ function hasAdditionalDetails(entry) {
          entry.socialContext || 
          entry.sleepQuality || 
          entry.energyLevel
+}
+
+// Toggle entry expanded state
+function toggleEntry(entryId) {
+  if (expandedEntries.value.has(entryId)) {
+    expandedEntries.value.delete(entryId)
+  } else {
+    expandedEntries.value.add(entryId)
+  }
+  // Force reactivity by creating a new Set
+  expandedEntries.value = new Set(expandedEntries.value)
+}
+
+// Check if entry is expanded
+function isEntryExpanded(entryId) {
+  return expandedEntries.value.has(entryId)
 }
 
 // Delete an entry
