@@ -275,7 +275,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useEntriesStore } from '../stores/entries'
@@ -368,6 +368,21 @@ function handleLocationChange(value) {
     form.value.location = ''
   }
 }
+
+// Watch for custom selection
+watch(() => form.value.triggers, (newValue) => {
+  if (newValue === '__custom__') {
+    triggersCustomMode.value = true
+    form.value.triggers = ''
+  }
+})
+
+watch(() => form.value.location, (newValue) => {
+  if (newValue === '__custom__') {
+    locationCustomMode.value = true
+    form.value.location = ''
+  }
+})
 
 // Select from saved suggestions
 function selectTrigger(value) {
