@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen zen-background text-[#e7edf2]">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl zen-heading text-center mb-8 bg-gradient-to-r from-[#a996c2] to-[#8faa98] bg-clip-text text-transparent">Emotion Mapper</h1>
-      <p class="text-center text-xl text-[#e7edf2] mb-8">
+      <h1 class="text-4xl zen-heading text-center mb-8 text-[#b9c3cc]">Emotion Mapper</h1>
+      <p class="text-center text-xl text-[#b9c3cc] mb-8">
         Track patterns. Notice triggers. Support regulation.
       </p>
       <div class="max-w-2xl mx-auto zen-card p-6">
