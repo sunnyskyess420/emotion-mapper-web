@@ -48,10 +48,12 @@
             </div>
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4">
           <div class="zen-card p-6">
             <h3 class="text-lg zen-heading mb-4">Intensity Trend</h3>
-            <canvas ref="intensityChart"></canvas>
+            <div class="relative" style="min-height: 250px;">
+              <canvas ref="intensityChart"></canvas>
+            </div>
           </div>
           <div class="zen-card p-6">
             <h3 class="text-lg zen-heading mb-4">Emotion Distribution</h3>
@@ -301,6 +303,28 @@ const { entries, isLoading } = storeToRefs(entriesStore)
 // Chart refs
 const intensityChart = ref(null)
 const emotionChart = ref(null)
+
+// Color interpolation for intensity (green -> yellow -> red) - matches EmotionEntry
+function getIntensityColor(value) {
+  const intensity = value / 10 // Normalize to 0-1
+  
+  // Green (low) to Yellow (medium) to Red (high)
+  if (intensity <= 0.5) {
+    // Green to Yellow (0-5)
+    const t = intensity * 2 // Normalize to 0-1
+    const r = Math.round(76 + (255 - 76) * t) // 76 -> 255
+    const g = Math.round(175 + (200 - 175) * t) // 175 -> 200
+    const b = Math.round(80 + (0 - 80) * t) // 80 -> 0
+    return `rgb(${r}, ${g}, ${b})`
+  } else {
+    // Yellow to Red (5-10)
+    const t = (intensity - 0.5) * 2 // Normalize to 0-1
+    const r = Math.round(255 + (239 - 255) * t) // 255 -> 239
+    const g = Math.round(200 + (68 - 200) * t) // 200 -> 68
+    const b = Math.round(0 + (68 - 0) * t) // 0 -> 68
+    return `rgb(${r}, ${g}, ${b})`
+  }
+}
 
 // Chart instances
 let intensityChartInstance = null
@@ -672,10 +696,20 @@ function initIntensityChart() {
       datasets: [{
         label: 'Intensity',
         data: data,
-        borderColor: 'rgb(59, 130, 246)',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderColor: 'rgb(143, 170, 152)',
+        backgroundColor: 'rgba(143, 170, 152, 0.1)',
         tension: 0.1,
-        fill: true
+        fill: true,
+        pointBackgroundColor: function(context) {
+          const value = context.raw
+          return getIntensityColor(value)
+        },
+        pointBorderColor: function(context) {
+          const value = context.raw
+          return getIntensityColor(value)
+        },
+        pointRadius: 4,
+        pointHoverRadius: 6
       }]
     },
     options: {
