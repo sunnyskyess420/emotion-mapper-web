@@ -191,7 +191,7 @@
             @click="saveEntry"
             class="flex-1 zen-button-primary font-semibold py-2 px-4"
           >
-            {{ isEditing ? 'Update Entry' : 'Save Entry' }}
+            {{ isEditing ? 'Update Entry' : 'Save To History' }}
           </button>
           <button 
             v-if="isEditing"
@@ -200,42 +200,6 @@
           >
             Cancel
           </button>
-        </div>
-      </div>
-      
-      <!-- Saved Entries List -->
-      <div class="max-w-2xl mx-auto zen-card p-6">
-        <h2 class="text-2xl zen-heading mb-4">Saved Entries ({{ entries.length }})</h2>
-        
-        <div v-if="entries.length === 0" class="text-[#b9c3cc] text-center py-4">
-          No entries yet. Add your first emotion above!
-        </div>
-        
-        <div v-else class="space-y-3">
-          <div 
-            v-for="entry in entries" 
-            :key="entry.id"
-            class="bg-[#24303a] rounded-lg p-4"
-          >
-            <div class="flex justify-between items-start mb-2">
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="emotion in getEmotions(entry)"
-                  :key="emotion"
-                  class="zen-tag px-3 py-1 text-sm font-semibold"
-                >
-                  {{ emotion }}
-                </span>
-              </div>
-              <span class="zen-tag px-2 py-1 text-sm">
-                Intensity: {{ entry.intensity }}/10
-              </span>
-            </div>
-            <p class="text-[#b9c3cc] text-sm mb-2">{{ entry.note }}</p>
-            <p class="text-[#6b7a85] text-xs">
-              {{ formatDate(entry.createdAt) }}
-            </p>
-          </div>
         </div>
       </div>
     </div>
