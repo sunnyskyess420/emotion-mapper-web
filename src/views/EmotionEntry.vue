@@ -70,22 +70,6 @@
             placeholder="Enter custom trigger..."
             class="w-full px-4 py-2 zen-input"
           >
-          <div v-if="savedTriggers.length > 0" class="flex flex-wrap gap-2 mt-2">
-            <span
-              v-for="trigger in savedTriggers"
-              :key="trigger.id"
-              @click="selectTrigger(trigger.value)"
-              class="zen-tag px-3 py-1 cursor-pointer flex items-center gap-1"
-            >
-              {{ trigger.value }}
-              <button
-                @click.stop="deleteTriggerSuggestion(trigger.id)"
-                class="text-slate-400 hover:text-red-400 ml-1"
-              >
-                ×
-              </button>
-            </span>
-          </div>
         </div>
 
         <!-- Location -->
@@ -114,22 +98,6 @@
             placeholder="Enter custom location..."
             class="w-full px-4 py-2 zen-input"
           >
-          <div v-if="savedLocations.length > 0" class="flex flex-wrap gap-2 mt-2">
-            <span
-              v-for="location in savedLocations"
-              :key="location.id"
-              @click="selectLocation(location.value)"
-              class="zen-tag px-3 py-1 cursor-pointer flex items-center gap-1"
-            >
-              {{ location.value }}
-              <button
-                @click.stop="deleteLocationSuggestion(location.id)"
-                class="text-slate-400 hover:text-red-400 ml-1"
-              >
-                ×
-              </button>
-            </span>
-          </div>
         </div>
 
         <!-- Time of Day -->
@@ -384,16 +352,6 @@ watch(() => form.value.location, (newValue) => {
   }
 })
 
-// Select from saved suggestions
-function selectTrigger(value) {
-  form.value.triggers = value
-  triggersCustomMode.value = false
-}
-
-function selectLocation(value) {
-  form.value.location = value
-  locationCustomMode.value = false
-}
 
 // Load entry data if editing
 onMounted(async () => {
