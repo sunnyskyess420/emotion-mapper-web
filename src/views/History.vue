@@ -786,11 +786,7 @@ function initEmotionChart() {
           }
         },
         tooltip: {
-          bodyFont: {
-            size: 12
-          },
-          padding: 12,
-          displayColors: false,
+          enabled: false,
           external: function(context) {
             // Tooltip Element
             let tooltipEl = document.getElementById('chartjs-tooltip')
