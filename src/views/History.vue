@@ -55,7 +55,9 @@
           </div>
           <div class="zen-card p-6">
             <h3 class="text-lg zen-heading mb-4">Emotion Distribution</h3>
-            <canvas ref="emotionChart"></canvas>
+            <div class="max-h-[400px] overflow-y-auto">
+              <canvas ref="emotionChart"></canvas>
+            </div>
           </div>
         </div>
       </div>
