@@ -47,17 +47,34 @@
         <!-- Triggers -->
         <div class="mb-4">
           <label class="block text-sm font-medium mb-2">Triggers</label>
+          <select 
+            v-if="!triggersCustomMode"
+            v-model="form.triggers"
+            @change="handleTriggersChange"
+            class="w-full px-4 py-2 zen-select"
+          >
+            <option value="">Select trigger...</option>
+            <option
+              v-for="trigger in savedTriggers"
+              :key="trigger.id"
+              :value="trigger.value"
+            >
+              {{ trigger.value }}
+            </option>
+            <option value="__custom__">Custom...</option>
+          </select>
           <input 
+            v-else
             v-model="form.triggers"
             type="text"
-            placeholder="What caused this emotion?"
+            placeholder="Enter custom trigger..."
             class="w-full px-4 py-2 zen-input"
           >
           <div v-if="savedTriggers.length > 0" class="flex flex-wrap gap-2 mt-2">
             <span
               v-for="trigger in savedTriggers"
               :key="trigger.id"
-              @click="form.triggers = trigger.value"
+              @click="selectTrigger(trigger.value)"
               class="zen-tag px-3 py-1 cursor-pointer flex items-center gap-1"
             >
               {{ trigger.value }}
@@ -74,17 +91,34 @@
         <!-- Location -->
         <div class="mb-4">
           <label class="block text-sm font-medium mb-2">Location</label>
+          <select 
+            v-if="!locationCustomMode"
+            v-model="form.location"
+            @change="handleLocationChange"
+            class="w-full px-4 py-2 zen-select"
+          >
+            <option value="">Select location...</option>
+            <option
+              v-for="location in savedLocations"
+              :key="location.id"
+              :value="location.value"
+            >
+              {{ location.value }}
+            </option>
+            <option value="__custom__">Custom...</option>
+          </select>
           <input 
+            v-else
             v-model="form.location"
             type="text"
-            placeholder="Where are you?"
+            placeholder="Enter custom location..."
             class="w-full px-4 py-2 zen-input"
           >
           <div v-if="savedLocations.length > 0" class="flex flex-wrap gap-2 mt-2">
             <span
               v-for="location in savedLocations"
               :key="location.id"
-              @click="form.location = location.value"
+              @click="selectLocation(location.value)"
               class="zen-tag px-3 py-1 cursor-pointer flex items-center gap-1"
             >
               {{ location.value }}
@@ -267,6 +301,10 @@ const { entries } = storeToRefs(entriesStore)
 const savedTriggers = ref([])
 const savedLocations = ref([])
 
+// Custom input state
+const triggersCustomMode = ref(false)
+const locationCustomMode = ref(false)
+
 // Form data
 const form = ref({
   emotions: [],
@@ -316,6 +354,32 @@ async function deleteLocationSuggestion(id) {
   await loadSavedSuggestions()
 }
 
+// Handle dropdown changes
+function handleTriggersChange(value) {
+  if (value === '__custom__') {
+    triggersCustomMode.value = true
+    form.value.triggers = ''
+  }
+}
+
+function handleLocationChange(value) {
+  if (value === '__custom__') {
+    locationCustomMode.value = true
+    form.value.location = ''
+  }
+}
+
+// Select from saved suggestions
+function selectTrigger(value) {
+  form.value.triggers = value
+  triggersCustomMode.value = false
+}
+
+function selectLocation(value) {
+  form.value.location = value
+  locationCustomMode.value = false
+}
+
 // Load entry data if editing
 onMounted(async () => {
   await loadSavedSuggestions()
@@ -337,6 +401,13 @@ onMounted(async () => {
         sleepQuality: entryToEdit.sleepQuality || '',
         energyLevel: entryToEdit.energyLevel || ''
       }
+      
+      // Check if current trigger/location is in saved suggestions
+      const triggerExists = savedTriggers.value.some(t => t.value === entryToEdit.triggers)
+      const locationExists = savedLocations.value.some(l => l.value === entryToEdit.location)
+      
+      triggersCustomMode.value = entryToEdit.triggers && !triggerExists
+      locationCustomMode.value = entryToEdit.location && !locationExists
     }
   }
 })
@@ -412,6 +483,10 @@ async function saveEntry() {
         sleepQuality: '',
         energyLevel: ''
       }
+      
+      // Reset custom mode
+      triggersCustomMode.value = false
+      locationCustomMode.value = false
       
       window.showToast('Entry saved successfully!')
     }
