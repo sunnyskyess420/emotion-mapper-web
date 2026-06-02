@@ -18,13 +18,36 @@
           <label class="block text-sm font-medium mb-2">
             Intensity: {{ form.intensity }}/10
           </label>
-          <input 
-            v-model="form.intensity"
-            type="range"
-            min="1"
-            max="10"
-            class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
-          >
+          <div class="relative">
+            <div class="intensity-track-container">
+              <div class="intensity-track" :style="{ background: getIntensityGradient() }"></div>
+              <div class="intensity-dots">
+                <div 
+                  v-for="i in 10" 
+                  :key="i"
+                  class="intensity-dot"
+                  :class="{ 'active': i <= form.intensity }"
+                  :style="{ background: i <= form.intensity ? getIntensityColor(i) : 'rgba(255,255,255,0.2)' }"
+                ></div>
+              </div>
+            </div>
+            <input 
+              ref="intensitySlider"
+              v-model="form.intensity"
+              type="range"
+              min="1"
+              max="10"
+              class="intensity-slider w-full h-2 appearance-none cursor-pointer opacity-0 absolute top-0 left-0"
+              @input="updateIntensityVisuals"
+            >
+            <div 
+              class="intensity-thumb"
+              :style="{ 
+                left: getThumbPosition(),
+                background: getIntensityColor(form.intensity)
+              }"
+            ></div>
+          </div>
         </div>
         
         <!-- Note -->
@@ -207,7 +230,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useEntriesStore } from '../stores/entries'
@@ -252,6 +275,54 @@ const form = ref({
   sleepQuality: '',
   energyLevel: ''
 })
+
+// Intensity slider ref
+const intensitySlider = ref(null)
+
+// Color interpolation for intensity slider (green -> yellow -> red)
+function getIntensityColor(value) {
+  const intensity = value / 10 // Normalize to 0-1
+  
+  // Green (low) to Yellow (medium) to Red (high)
+  if (intensity <= 0.5) {
+    // Green to Yellow (0-5)
+    const t = intensity * 2 // Normalize to 0-1
+    const r = Math.round(76 + (255 - 76) * t) // 76 -> 255
+    const g = Math.round(175 + (200 - 175) * t) // 175 -> 200
+    const b = Math.round(80 + (0 - 80) * t) // 80 -> 0
+    return `rgb(${r}, ${g}, ${b})`
+  } else {
+    // Yellow to Red (5-10)
+    const t = (intensity - 0.5) * 2 // Normalize to 0-1
+    const r = Math.round(255 + (239 - 255) * t) // 255 -> 239
+    const g = Math.round(200 + (68 - 200) * t) // 200 -> 68
+    const b = Math.round(0 + (68 - 0) * t) // 0 -> 68
+    return `rgb(${r}, ${g}, ${b})`
+  }
+}
+
+// Get gradient for the track
+function getIntensityGradient() {
+  const colors = []
+  for (let i = 1; i <= 10; i++) {
+    colors.push(getIntensityColor(i))
+  }
+  return `linear-gradient(to right, ${colors.join(', ')})`
+}
+
+// Get thumb position based on intensity
+function getThumbPosition() {
+  const percentage = ((form.value.intensity - 1) / 9) * 100
+  return `${percentage}%`
+}
+
+// Update visuals on input change
+function updateIntensityVisuals() {
+  // Force reactivity update
+  nextTick(() => {
+    // Visuals will update automatically through reactive bindings
+  })
+}
 
 // Check if we're in edit mode
 const isEditing = computed(() => !!route.query.editId)
@@ -443,3 +514,59 @@ function formatDate(dateString) {
   return date.toLocaleString()
 }
 </script>
+
+<style scoped>
+.intensity-track-container {
+  position: relative;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.intensity-track {
+  position: absolute;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.intensity-dots {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.intensity-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+}
+
+.intensity-dot.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px currentColor;
+}
+
+.intensity-thumb {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #8faa98;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: left 0.15s ease, background 0.15s ease;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.intensity-thumb:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+</style>
