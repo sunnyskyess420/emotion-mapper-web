@@ -529,6 +529,8 @@ function formatDate(dateString) {
   height: 8px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.1);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .intensity-dots {
@@ -538,6 +540,9 @@ function formatDate(dateString) {
   justify-content: space-between;
   align-items: center;
   padding: 0 4px;
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .intensity-dot {
@@ -562,11 +567,13 @@ function formatDate(dateString) {
   border: 3px solid rgba(255, 255, 255, 0.8);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: left 0.15s ease, background 0.15s ease;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-50%);
   z-index: 10;
+  cursor: pointer;
+  top: 50%;
 }
 
 .intensity-thumb:hover {
-  transform: translateX(-50%) scale(1.1);
+  transform: translateX(-50%) translateY(-50%) scale(1.1);
 }
 </style>
