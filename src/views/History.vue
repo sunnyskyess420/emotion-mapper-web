@@ -55,7 +55,7 @@
           </div>
           <div class="zen-card p-6">
             <h3 class="text-lg zen-heading mb-4">Emotion Distribution</h3>
-            <div class="max-h-[400px] overflow-y-auto">
+            <div class="relative" style="min-height: 300px;">
               <canvas ref="emotionChart"></canvas>
             </div>
           </div>
@@ -777,12 +777,18 @@ function initEmotionChart() {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: true,
       plugins: {
         legend: {
           position: 'bottom',
           labels: {
             color: 'rgb(148, 163, 184)',
-            padding: 20
+            padding: 12,
+            boxWidth: 12,
+            font: {
+              size: 12
+            },
+            usePointStyle: true
           }
         },
         tooltip: {
@@ -886,13 +892,33 @@ onMounted(() => {
     }
   })
   
-  // Handle window resize to redraw charts
+  // Handle window resize to trigger chart resize
   window.addEventListener('resize', () => {
-    if (entriesByTimeRange.value && entriesByTimeRange.value.length > 0) {
-      initIntensityChart()
-      initEmotionChart()
+    if (intensityChartInstance) {
+      intensityChartInstance.resize()
+    }
+    if (emotionChartInstance) {
+      emotionChartInstance.resize()
     }
   })
+  
+  // Add ResizeObserver for container resize
+  const resizeObserver = new ResizeObserver(() => {
+    if (intensityChartInstance) {
+      intensityChartInstance.resize()
+    }
+    if (emotionChartInstance) {
+      emotionChartInstance.resize()
+    }
+  })
+  
+  // Observe the chart containers
+  if (intensityChart.value) {
+    resizeObserver.observe(intensityChart.value.parentElement)
+  }
+  if (emotionChart.value) {
+    resizeObserver.observe(emotionChart.value.parentElement)
+  }
 })
 
 // Update charts when entries or time range changes
