@@ -61,12 +61,6 @@ window.showToast = (message, type = 'success') => {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  /* Fallback gradient if image doesn't load */
-  background:
-    radial-gradient(circle at 20% 18%, rgba(143, 170, 152, 0.16), transparent 28%),
-    radial-gradient(circle at 82% 24%, rgba(169, 150, 194, 0.14), transparent 24%),
-    radial-gradient(circle at 50% 82%, rgba(127, 153, 173, 0.12), transparent 30%),
-    linear-gradient(180deg, #202833 0%, #182028 48%, #13181d 100%);
   color: #e7edf2;
 }
 
