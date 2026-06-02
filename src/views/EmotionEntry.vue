@@ -518,7 +518,7 @@ function formatDate(dateString) {
 <style scoped>
 .intensity-track-container {
   position: relative;
-  height: 32px;
+  height: 48px;
   display: flex;
   align-items: center;
 }
@@ -580,5 +580,10 @@ function formatDate(dateString) {
 .intensity-thumb:hover {
   transform: translateX(-50%) translateY(-50%) scale(1.1);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4), inset 0 0 16px currentColor;
+}
+
+.intensity-slider {
+  height: 48px;
+  cursor: pointer;
 }
 </style>
