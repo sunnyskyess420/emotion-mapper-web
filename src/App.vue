@@ -10,6 +10,9 @@
             <router-link to="/emotion-entry" class="nav-link font-semibold transition-colors duration-200">
               🎭 Emotion Entry
             </router-link>
+            <router-link to="/coping-skills-menu" class="nav-link font-semibold transition-colors duration-200">
+              🧘 Coping Menu
+            </router-link>
             <router-link to="/history" class="nav-link font-semibold transition-colors duration-200">
               🎭 History
             </router-link>

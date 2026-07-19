@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import EmotionEntry from '../views/EmotionEntry.vue'
 import History from '../views/History.vue'
+import CopingSkillsMenu from '../views/CopingSkillsMenu.vue'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/history',
     name: 'History',
     component: History
+  },
+  {
+    path: '/coping-skills-menu',
+    name: 'CopingSkillsMenu',
+    component: CopingSkillsMenu
   }
 ]
 

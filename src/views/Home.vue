@@ -12,6 +12,9 @@
           <router-link to="/emotion-entry" class="zen-button-primary text-center py-3 px-6 font-semibold">
             Start an Entry
           </router-link>
+          <router-link to="/coping-skills-menu" class="zen-button text-center py-3 px-6 font-semibold">
+            Browse Coping Skills Menu
+          </router-link>
           <router-link to="/history" class="zen-button text-center py-3 px-6 font-semibold">
             Review History
           </router-link>
@@ -33,6 +36,7 @@
           <li>Pick emotions from the wheel</li>
           <li>Track body sensations and triggers</li>
           <li>Log coping skills you used</li>
+          <li>Browse the Coping Skills Menu for ideas</li>
           <li>Review patterns in History</li>
           <li>Keep your data private on your device</li>
         </ul>
