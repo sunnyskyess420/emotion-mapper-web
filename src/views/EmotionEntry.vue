@@ -391,7 +391,7 @@ watch(() => form.value.location, (newValue) => {
 // Load entry data if editing
 onMounted(async () => {
   await loadSavedSuggestions()
-  
+
   if (isEditing.value) {
     const entryToEdit = entries.value?.find(e => e.id === parseInt(route.query.editId))
     if (entryToEdit) {
@@ -409,14 +409,22 @@ onMounted(async () => {
         sleepQuality: entryToEdit.sleepQuality || '',
         energyLevel: entryToEdit.energyLevel || ''
       }
-      
+
       // Check if current trigger/location is in saved suggestions
       const triggerExists = savedTriggers.value.some(t => t.value === entryToEdit.triggers)
       const locationExists = savedLocations.value.some(l => l.value === entryToEdit.location)
-      
+
       triggersCustomMode.value = entryToEdit.triggers && !triggerExists
       locationCustomMode.value = entryToEdit.location && !locationExists
     }
+  } else if (route.query.skill) {
+    // Came from the Coping Skills Menu "Use this skill" button — pre-select that skill
+    const skill = decodeURIComponent(String(route.query.skill))
+    if (skill && !form.value.copingStrategies.includes(skill)) {
+      form.value.copingStrategies = [...form.value.copingStrategies, skill]
+    }
+    // Show a gentle confirmation toast
+    window.showToast(`Pre-selected: ${skill}`, 'success')
   }
 })
 
@@ -587,3 +595,4 @@ function formatDate(dateString) {
   cursor: pointer;
 }
 </style>
+

@@ -61,6 +61,22 @@
               <canvas ref="intensityChart"></canvas>
             </div>
           </div>
+          <div v-if="hasCopingData" class="zen-card p-6">
+            <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+              <h3 class="text-lg zen-heading">Coping Skill Usage &amp; Effectiveness</h3>
+              <p class="text-xs text-[#8b9ba5] max-w-md">
+                Bar length = number of uses. Bar color = average intensity of entries where this skill was used
+                (green = lower-intensity moments, red = higher-intensity moments).
+              </p>
+            </div>
+            <div class="relative" style="min-height: 300px;">
+              <canvas ref="skillChart"></canvas>
+            </div>
+            <p v-if="topSkillInsight" class="text-sm text-[#b9c3cc] mt-4 pt-4 border-t border-white/10">
+              <span class="text-[#8faa98] font-semibold">Most used:</span>
+              {{ topSkillInsight }}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -303,6 +319,7 @@ const { entries, isLoading } = storeToRefs(entriesStore)
 // Chart refs
 const intensityChart = ref(null)
 const emotionChart = ref(null)
+const skillChart = ref(null)
 
 // Color interpolation for intensity (green -> yellow -> red) - matches EmotionEntry
 function getIntensityColor(value) {
@@ -329,6 +346,7 @@ function getIntensityColor(value) {
 // Chart instances
 let intensityChartInstance = null
 let emotionChartInstance = null
+let skillChartInstance = null
 
 // Filter state
 const searchQuery = ref('')
@@ -407,6 +425,39 @@ const averageIntensity = computed(() => {
   
   const total = entries.value.reduce((sum, entry) => sum + parseInt(entry.intensity || 0), 0)
   return (total / entries.value.length).toFixed(1)
+})
+
+// Aggregate coping skill usage stats across all entries (within current time range)
+// Returns array of { skill, count, avgIntensity } sorted by count desc
+const copingSkillStats = computed(() => {
+  if (!entriesByTimeRange.value || entriesByTimeRange.value.length === 0) return []
+  const map = {} // skill -> { count, intensitySum }
+  entriesByTimeRange.value.forEach(entry => {
+    const strategies = getCopingStrategies(entry)
+    if (!Array.isArray(strategies) || strategies.length === 0) return
+    strategies.forEach(strat => {
+      if (!map[strat]) map[strat] = { count: 0, intensitySum: 0 }
+      map[strat].count += 1
+      map[strat].intensitySum += parseInt(entry.intensity || 0, 10)
+    })
+  })
+  return Object.entries(map)
+    .map(([skill, v]) => ({
+      skill,
+      count: v.count,
+      avgIntensity: v.count > 0 ? v.intensitySum / v.count : 0
+    }))
+    .sort((a, b) => b.count - a.count)
+})
+
+// Show the coping chart card only if at least one entry has coping strategies
+const hasCopingData = computed(() => copingSkillStats.value.length > 0)
+
+// Human-readable insight for the most-used skill
+const topSkillInsight = computed(() => {
+  if (copingSkillStats.value.length === 0) return ''
+  const top = copingSkillStats.value[0]
+  return `${top.skill} — ${top.count} ${top.count === 1 ? 'use' : 'uses'}, avg intensity ${top.avgIntensity.toFixed(1)}/10`
 })
 
 // Get unique emotions for filter dropdown
@@ -917,11 +968,86 @@ function initEmotionChart() {
   })
 }
 
+// Initialize coping skill effectiveness chart
+function initSkillChart() {
+  if (!skillChart.value || !copingSkillStats.value || copingSkillStats.value.length === 0) {
+    return
+  }
+
+  // Take top 15 skills to keep the chart readable
+  const stats = copingSkillStats.value.slice(0, 15)
+  // Reverse so the highest-count skill appears at the top of the horizontal bar chart
+  const reversed = [...stats].reverse()
+  const labels = reversed.map(s => s.skill.length > 40 ? s.skill.slice(0, 37) + '...' : s.skill)
+  const counts = reversed.map(s => s.count)
+  const intensities = reversed.map(s => s.avgIntensity)
+  const barColors = reversed.map(s => getIntensityColor(s.avgIntensity))
+
+  if (skillChartInstance) {
+    skillChartInstance.destroy()
+  }
+
+  skillChartInstance = new Chart(skillChart.value, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Uses',
+        data: counts,
+        backgroundColor: barColors,
+        borderColor: barColors,
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: { display: true, text: 'Number of uses', color: 'rgb(148, 163, 184)' },
+          grid: { color: 'rgba(148, 163, 184, 0.1)' },
+          ticks: { color: 'rgb(148, 163, 184)', precision: 0 }
+        },
+        y: {
+          grid: { color: 'rgba(148, 163, 184, 0.05)' },
+          ticks: { color: 'rgb(148, 163, 184)', font: { size: 11 } }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(31, 40, 49, 0.95)',
+          titleColor: '#e7edf2',
+          bodyColor: '#b9c3cc',
+          borderColor: 'rgba(255, 255, 255, 0.12)',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: function(context) {
+              const idx = context.dataIndex
+              const stat = reversed[idx]
+              return [
+                `Uses: ${stat.count}`,
+                `Avg intensity: ${stat.avgIntensity.toFixed(1)}/10`
+              ]
+            }
+          }
+        }
+      }
+    }
+  })
+}
+
 // Initialize charts on mount
 onMounted(() => {
   nextTick(() => {
     initIntensityChart()
     initEmotionChart()
+    initSkillChart()
   })
   
   // Handle window resize to trigger chart resize
@@ -931,6 +1057,9 @@ onMounted(() => {
     }
     if (emotionChartInstance) {
       emotionChartInstance.resize()
+    }
+    if (skillChartInstance) {
+      skillChartInstance.resize()
     }
   })
   
@@ -942,6 +1071,9 @@ onMounted(() => {
     if (emotionChartInstance) {
       emotionChartInstance.resize()
     }
+    if (skillChartInstance) {
+      skillChartInstance.resize()
+    }
   })
   
   // Observe the chart containers
@@ -951,6 +1083,9 @@ onMounted(() => {
   if (emotionChart.value) {
     resizeObserver.observe(emotionChart.value.parentElement)
   }
+  if (skillChart.value) {
+    resizeObserver.observe(skillChart.value.parentElement)
+  }
 })
 
 // Update charts when entries or time range changes
@@ -959,7 +1094,9 @@ watch([entries, timeRange], () => {
     if (entriesByTimeRange.value && entriesByTimeRange.value.length > 0) {
       initIntensityChart()
       initEmotionChart()
+      initSkillChart()
     }
   })
 }, { deep: true })
 </script>
+

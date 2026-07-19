@@ -24,6 +24,7 @@ A modern, privacy-focused emotion tracking web application. Track your emotional
 - **History & Analytics** - View all your entries with powerful search and filtering capabilities
 - **Visual Analytics** - Interactive charts showing intensity trends over time and emotion distribution
 - **Data Export** - Export your data as JSON or CSV for backup or analysis
+- **Coping Skills Menu** - A dedicated reference page (accessible from the navbar) that organizes coping skills into "Regulation Recipes" (Quick Starters, Main Regulation Tools, Emergency Reset, Comfort Picks, Daily Maintenance), with corresponding "Coping Skills" techniques and "How It Helps" explanations. Includes a quick-start guide and energy-level recommendations to help you choose the right skill in the moment.
 - **Edit & Delete** - Full CRUD operations for managing your entries
 - **Privacy First** - All data stored locally in your browser using IndexedDB (100% offline, no cloud sync)
 - **Dark Theme** - Beautiful dark mode interface with gradient backgrounds and smooth animations
@@ -148,4 +149,5 @@ If you encounter any issues:
 ---
 
 **Made with ❤️ for emotional self-awareness**
+
 

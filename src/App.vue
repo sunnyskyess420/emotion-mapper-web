@@ -31,12 +31,14 @@
     </router-view>
 
     <Toast :message="toastMessage" :type="toastType" />
+    <InstallPrompt />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import Toast from './components/Toast.vue'
+import InstallPrompt from './components/InstallPrompt.vue'
 
 const toastMessage = ref('')
 const toastType = ref('success')

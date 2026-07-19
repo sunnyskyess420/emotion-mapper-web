@@ -52,14 +52,47 @@
               class="zen-card p-5 transition-all duration-300"
               :class="activeCategory === category.id ? 'ring-2 ring-[#8faa98]/60 shadow-lg' : 'opacity-90'"
             >
-              <ul class="space-y-2">
+              <ul class="space-y-3">
                 <li
                   v-for="skill in category.skills"
-                  :key="skill"
-                  class="flex items-start gap-2 text-sm text-[#e7edf2]"
+                  :key="skill.label"
+                  class="flex items-start gap-2 text-sm"
                 >
                   <span class="text-[#8faa98] mt-0.5 flex-shrink-0">•</span>
-                  <span>{{ skill }}</span>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="text-[#e7edf2]">{{ skill.label }}</span>
+                      <!-- Breathing pacer button for breathing skills -->
+                      <button
+                        v-if="skill.breathing"
+                        @click.stop="openBreather(skill.breathing)"
+                        class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#8faa98]/20 border border-[#8faa98]/40 text-[#8faa98] hover:bg-[#8faa98]/30 transition-colors"
+                        :title="`Start ${skill.breathing === 'box' ? 'Box Breathing' : '4-7-8'} pacer`"
+                      >
+                        ▶ Pacer
+                      </button>
+                    </div>
+                    <!-- Recently used badge -->
+                    <div v-if="skillUsage[skill.label]" class="mt-1 flex items-center gap-2 text-[11px] text-[#8b9ba5]">
+                      <span class="inline-flex items-center gap-1">
+                        <span class="text-[#a996c2]">✓</span>
+                        Used {{ skillUsage[skill.label].count }}×
+                      </span>
+                      <span v-if="skillUsage[skill.label].avgIntensity !== null" class="text-[#7f99ad]">
+                        · avg intensity {{ skillUsage[skill.label].avgIntensity }}/10
+                      </span>
+                    </div>
+                    <!-- Use this skill button -->
+                    <button
+                      @click.stop="useSkill(skill.label)"
+                      class="mt-1.5 text-[11px] text-[#a996c2] hover:text-[#8faa98] transition-colors inline-flex items-center gap-1"
+                    >
+                      Use this skill
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </button>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -133,11 +166,26 @@
         </p>
       </div>
     </div>
+
+    <!-- Breathing Pacer Modal -->
+    <BreathingPacer
+      :is-open="breatherOpen"
+      :pattern="breatherPattern"
+      @close="breatherOpen = false"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useEntriesStore } from '../stores/entries'
+import BreathingPacer from '../components/BreathingPacer.vue'
+
+const router = useRouter()
+const entriesStore = useEntriesStore()
+const { entries } = storeToRefs(entriesStore)
 
 // Active category for hover/click highlight
 const activeCategory = ref(null)
@@ -150,7 +198,68 @@ function toggleActive(id) {
   activeCategory.value = activeCategory.value === id ? null : id
 }
 
+// ----- Breathing pacer state -----
+const breatherOpen = ref(false)
+const breatherPattern = ref('box')
+
+function openBreather(pattern) {
+  breatherPattern.value = pattern
+  breatherOpen.value = true
+}
+
+// ----- "Use this skill" → jump to Emotion Entry with that skill pre-selected -----
+function useSkill(skillLabel) {
+  router.push({
+    path: '/emotion-entry',
+    query: { skill: skillLabel }
+  })
+}
+
+// ----- Recently-used badges: compute usage count + avg intensity per skill -----
+// Normalize a stored coping strategy string to match a menu skill label.
+// Stored strategies from the DBT picker have formats like "P: Paced breathing",
+// "T: Tip the temperature" — these won't match the menu labels, so we only
+// surface counts for skills whose exact label appears in entry.copingStrategies.
+function getEntryCoping(entry) {
+  if (Array.isArray(entry.copingStrategies)) return entry.copingStrategies
+  if (typeof entry.copingStrategies === 'string') return [entry.copingStrategies]
+  return []
+}
+
+const skillUsage = computed(() => {
+  const map = {} // label -> { count, intensitySum }
+  if (!entries.value || !Array.isArray(entries.value)) return map
+
+  // Build a flat list of all menu skill labels
+  const allLabels = []
+  categories.forEach(cat => cat.skills.forEach(s => allLabels.push(s.label)))
+
+  entries.value.forEach(entry => {
+    const strategies = getEntryCoping(entry)
+    strategies.forEach(strat => {
+      // Direct match
+      if (allLabels.includes(strat)) {
+        if (!map[strat]) map[strat] = { count: 0, intensitySum: 0 }
+        map[strat].count += 1
+        map[strat].intensitySum += parseInt(entry.intensity || 0, 10)
+      }
+    })
+  })
+
+  // Compute averages
+  Object.keys(map).forEach(label => {
+    const v = map[label]
+    map[label] = {
+      count: v.count,
+      avgIntensity: v.count > 0 ? (v.intensitySum / v.count).toFixed(1) : null
+    }
+  })
+
+  return map
+})
+
 // Coping Skills Menu Data — based on the "Coping Skills Menu" handout
+// `breathing` field marks skills that have a guided breathing pacer
 const categories = [
   {
     id: 'quick-starters',
@@ -158,11 +267,11 @@ const categories = [
     name: 'Quick Starters',
     subtitle: '5-minute calming tools',
     skills: [
-      'Box breathing (4-4-4-4)',
-      'Grounding — name 5 things you see',
-      'Shoulder roll / stretch',
-      'Sip cold water slowly',
-      'Change physical position'
+      { label: 'Box breathing (4-4-4-4)', breathing: 'box' },
+      { label: 'Grounding — name 5 things you see' },
+      { label: 'Shoulder roll / stretch' },
+      { label: 'Sip cold water slowly' },
+      { label: 'Change physical position' }
     ],
     howHelpsTitle: 'Immediate Stress Reduction',
     howHelpsDesc: 'Tools that calm the nervous system in the moment, bringing you back to baseline quickly.',
@@ -174,11 +283,11 @@ const categories = [
     name: 'Main Regulation Tools',
     subtitle: 'Deep coping strategies',
     skills: [
-      'Thought reframing',
-      'Journaling',
-      'Guided meditation',
-      'Progressive muscle relaxation',
-      'Mindful walking'
+      { label: 'Thought reframing' },
+      { label: 'Journaling' },
+      { label: 'Guided meditation' },
+      { label: 'Progressive muscle relaxation' },
+      { label: 'Mindful walking' }
     ],
     howHelpsTitle: 'Deeper Emotional Regulation',
     howHelpsDesc: 'Practices that help you understand and manage emotions long-term, building self-awareness.',
@@ -190,11 +299,11 @@ const categories = [
     name: 'Emergency Reset',
     subtitle: 'For panic / overwhelm',
     skills: [
-      'Cold water splash on face',
-      '5-4-3-2-1 sensory grounding',
-      'Slow breathing (4-7-8)',
-      'Step away from triggers',
-      'Repeat a safe phrase ("I am okay")'
+      { label: 'Cold water splash on face' },
+      { label: '5-4-3-2-1 sensory grounding' },
+      { label: 'Slow breathing (4-7-8)', breathing: '478' },
+      { label: 'Step away from triggers' },
+      { label: 'Repeat a safe phrase ("I am okay")' }
     ],
     howHelpsTitle: 'Safety & Grounding',
     howHelpsDesc: 'Strategies that re-engage the nervous system when emotions feel too big to handle.',
@@ -206,11 +315,11 @@ const categories = [
     name: 'Comfort Picks',
     subtitle: 'Gentle self-soothing ideas',
     skills: [
-      'Wrap in a weighted blanket',
-      'Listen to calming music',
-      'Light a candle',
-      'Gentle self-touch (hand on heart)',
-      'Warm drink (tea, cocoa)'
+      { label: 'Wrap in a weighted blanket' },
+      { label: 'Listen to calming music' },
+      { label: 'Light a candle' },
+      { label: 'Gentle self-touch (hand on heart)' },
+      { label: 'Warm drink (tea, cocoa)' }
     ],
     howHelpsTitle: 'Comfort & Reassurance',
     howHelpsDesc: 'Gentle self-soothing practices that reduce overwhelm by signaling safety to your body.',
@@ -222,11 +331,11 @@ const categories = [
     name: 'Daily Maintenance',
     subtitle: 'Preventive habits',
     skills: [
-      'Regular sleep schedule',
-      'Morning sunlight (10 min)',
-      'Gratitude journaling',
-      'Digital boundaries (no-scroll hours)',
-      'Consistent movement (walk, stretch)'
+      { label: 'Regular sleep schedule' },
+      { label: 'Morning sunlight (10 min)' },
+      { label: 'Gratitude journaling' },
+      { label: 'Digital boundaries (no-scroll hours)' },
+      { label: 'Consistent movement (walk, stretch)' }
     ],
     howHelpsTitle: 'Preventive Coping',
     howHelpsDesc: 'Daily habits that build emotional resilience, so future stressors feel more manageable.',
@@ -248,6 +357,13 @@ const energyLevels = [
   { label: 'High Emotional Intensity', value: 'Emergency Reset' },
   { label: 'Need Quick Relief', value: 'Quick Starters' }
 ]
+
+// Ensure entries are loaded so we can compute usage badges
+onMounted(() => {
+  if (!entries.value || entries.value.length === 0) {
+    entriesStore.loadEntries()
+  }
+})
 </script>
 
 <style scoped>
@@ -260,3 +376,4 @@ const energyLevels = [
   transform: translateY(-2px);
 }
 </style>
+
